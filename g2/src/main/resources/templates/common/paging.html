@@ -1,0 +1,27 @@
+<div th:fragment="pageData(url,page)">
+    <div class="float-left ml-2" th:text="${'Showing '+ (page.number + 1) +' to '+(page.totalPages) + ' of ' +(page.totalPages)} + ' entries'"></div>
+    <div class="table-pagination paging_simple_numbers float-right">
+        <ul class="pagination">
+            <li th:class="${page.number eq 0} ? 'paginate_button page-item previous disabled' : 'paginate_button page-item previous'">
+                <a class="page-link" th:if="${not page.isFirst}">Previous</a>
+                <a class="page-link" th:if="${page.isFirst}" href="javascript:void(0);">Previous</a>
+            </li>
+
+            <li th:each="pageNo : ${#numbers.sequence(0, page.totalPages - 1)}"
+                th:class="${page.number eq pageNo}? 'paginate_button page-item active' : 'paginate_button page-item'">
+                <a class="page-link" th:if="${page.number  eq pageNo}" href="javascript:void(0);">
+                    <span th:text="${pageNo + 1}"></span>
+                </a>
+                <a class="page-link selected-page" th:attr="page-no=${pageNo+1}"
+                   th:if="${not (page.number  eq pageNo)}">
+                    <span th:text="${pageNo + 1}"></span>
+                </a>
+
+            </li>
+            <li th:class="${page.number + 1 ge page.totalPages} ? 'paginate_button page-item next disabled' : 'paginate_button page-item next'">
+                <a class="page-link next-page" th:if="${not page.isLast}">Next</a>
+                <a class="page-link" th:if="${page.isLast}" href="javascript:void(0);">Next</a>
+            </li>
+        </ul>
+    </div>
+</div>

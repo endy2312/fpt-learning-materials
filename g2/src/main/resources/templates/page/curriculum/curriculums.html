@@ -1,0 +1,187 @@
+<div class="container-fluid" th:fragment="curriculums(curriculums, request, permission, loginRoles, status)">
+    <section class=" content">
+        <div class="row">
+            <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+                <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+                    <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i class="ti-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">Curriculum Listing</a></li>
+                </ol>
+            </div>
+            <div class="col-12 mb-4">
+                <form th:action="@{/curriculums}" id="utils-form" class="" method="get">
+                    <div class="row align-items-center justify-content-between">
+                        <div class="col-4">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group d-flex mb-0">
+                                        <input type="text"
+                                               class="form-control border-right-0 rounded-right-0 bg-transparent text-dark border-secondary"
+                                               placeholder="Search" name="keyword"
+                                               th:value="${request.keyword == null ? '' : request.keyword}">
+                                        <div class="input-append">
+                                            <button class="btn btn-secondary btn-md btn-search rounded-left-0 border-secondary"
+                                                    type="submit">
+                                                <i class="ti-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <select onchange="this.form.submit()" th:if="${loginRoles!= null && (loginRoles.contains('CRDD Head') || loginRoles.contains('CRDD Staff') || loginRoles.contains('Admin'))}"
+                                            class="form-control select2 select2-hidden-accessible" name="status" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                        <option value="">All</option>
+                                        <option value="Activate" th:selected="${status == 'Activate'}">Activate</option>
+                                        <option value="Deactivate" th:selected="${status == 'Deactivate'}">Deactivate</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <a th:if="${permission != null && permission.canAdd == true}" th:href="@{/curriculum/insert}"
+                               class="btn btn-success d-flex align-items-center"><i class="ti-plus btn-icon-custom"></i>
+                                Create curriculum
+                            </a>
+                        </div>
+                    </div>
+                    <input type="hidden" name="page" th:value="${curriculums.number}" id="pageClicked">
+                    <input type="hidden" th:value="${curriculums.totalPages}" id="totalPage">
+                    <input type="hidden" id="sort-by" name="sortBy" th:value="${#strings.arraySplit(request.sortBy,':')[0]}">
+                    <input type="hidden" id="sort-type" name="sortType" th:value="${request.sortType}">
+                </form>
+            </div>
+            <div class="col-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col" class="min-w-200">CurriculumCode
+                            <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'code'}">
+                                <th:block th:switch="${request.sortType}">
+                                    <th:block th:case="desc">
+                                        <button class="float-right border-0 bg-transparent sort-column" sort-type="desc" column="code">
+                                            <i class="ti-angle-down"></i>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:case="asc">
+                                        <button class="float-right border-0 bg-transparent sort-column" sort-type="asc" column="code">
+                                            <i class="ti-angle-up"></i>
+                                        </button>
+                                    </th:block>
+                                </th:block>
+                            </th:block>
+                            <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'code'}">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="none" column="code">
+                                    <i class="ti-exchange-vertical"></i>
+                                </button>
+                            </th:block>
+                        </th>
+                        <th scope="col">Name
+                            <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'name'}">
+                                <th:block th:switch="${request.sortType}">
+                                    <th:block th:case="desc">
+                                        <button class="float-right border-0 bg-transparent sort-column" sort-type="desc" column="name">
+                                            <i class="ti-angle-down"></i>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:case="asc">
+                                        <button class="float-right border-0 bg-transparent sort-column" sort-type="asc" column="name">
+                                            <i class="ti-angle-up"></i>
+                                        </button>
+                                    </th:block>
+                                </th:block>
+                            </th:block>
+                            <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'name'}">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="none" column="name">
+                                    <i class="ti-exchange-vertical"></i>
+                                </button>
+                            </th:block>
+                        </th>
+                        <th scope="col">Description
+                        <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'description'}">
+                            <th:block th:switch="${request.sortType}">
+                                <th:block th:case="desc">
+                                    <button class="float-right border-0 bg-transparent sort-column" sort-type="desc" column="description">
+                                        <i class="ti-angle-down"></i>
+                                    </button>
+                                </th:block>
+                                <th:block th:case="asc">
+                                    <button class="float-right border-0 bg-transparent sort-column" sort-type="asc" column="description">
+                                        <i class="ti-angle-up"></i>
+                                    </button>
+                                </th:block>
+                            </th:block>
+                        </th:block>
+                        <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'description'}">
+                            <button class="float-right border-0 bg-transparent sort-column" sort-type="none" column="description">
+                                <i class="ti-exchange-vertical"></i>
+                            </button>
+                        </th:block>
+                        </th>
+                        <th scope="col" class="d-flex align-center">DecisionNo MM/dd/yyyy
+                        </th>
+                        <th scope="col" class="min-w-150">Total Credit
+                        </th>
+                        <th th:if="${loginRoles!= null && (loginRoles.contains('CRDD Head') || loginRoles.contains('CRDD Staff') || loginRoles.contains('Admin'))}" class="text-center" scope="col">Status</th>
+                        <th th:if="${loginRoles!= null && (loginRoles.contains('CRDD Head') || loginRoles.contains('CRDD Staff') || loginRoles.contains('Admin'))}" class="text-center" scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="curriculum, stat  : ${curriculums}">
+                        <td th:text="${stat.index + 1}">#</td>
+                        <td th:text="${curriculum.code == null || curriculum.code == '' ? '' : curriculum.code}">
+                            Curriculum Code
+                        </td>
+                        <td >
+                            <a th:href="@{/curriculum/overview(id=${curriculum.id})}" class="" th:text="${curriculum.name == null || curriculum.name == '' ? '' : curriculum.name}">Name</a>
+                        </td>
+                        <td th:text="${curriculum.description != null || curriculum.description != '' &&
+                        #strings.length(curriculum.description)>300 ? #strings.substring(curriculum.description,0,300)
+                        + '...' : curriculum.description}"></td>
+                        <td>
+                            <a href="" class="" th:text="${curriculum.decision == null || curriculum.decision.decisionNo == ''
+                        && curriculum.decision.decisionDate != null ? '' : curriculum.decision.getCustomFormat}">DecisionNo MM/dd/yyyy</a>
+                        </td>
+                        <td th:text="${curriculum.totalCredit == null || curriculum.totalCredit == '' ? '' : curriculum.totalCredit}">
+                            Total Credit
+                        </td>
+                        <td th:if="${loginRoles!= null && (loginRoles.contains('CRDD Head') || loginRoles.contains('CRDD Staff') || loginRoles.contains('Admin'))}">
+                            <div th:if="${curriculum.isActive == true}" class="status-badge bg-success-light" >
+                                <p class="d-inline-block m-0 text-success" >Activate</p>
+                            </div>
+                            <div th:if="${curriculum.isActive == false}" class="status-badge bg-danger-light">
+                                <p class="d-inline-block m-0 text-danger">Deactivate</p>
+                            </div>
+                        </td>
+                        <td th:if="${loginRoles!= null && (loginRoles.contains('CRDD Head') || loginRoles.contains('CRDD Staff') || loginRoles.contains('Admin'))}"
+                             class="text-center">
+                            <div class=" d-flex align-center" th:attr="curriculumId=${curriculum.id}">
+                            <a
+                               th:href="@{/curriculum/overview(id=${curriculum.id})}"
+                               class="btn btn-outline-info btn-icon"><i
+                                    class="ti-eye font-size-20"></i></a>
+                            <a th:if="${permission != null && permission.canEdit == true}"
+                               th:href="@{/curriculum/insert(id=${curriculum.id})}"
+                               class="btn btn-outline-warning btn-icon btn-update-account"><i
+                                    class="ti-pencil-alt font-size-20 "></i></a>
+                                <button type="button" th:if="${permission != null && curriculum.isActive == true
+                                && permission.canDelete == true}"
+                                        class="btn btn-outline-danger btn-icon btn-change-active-curriculum">
+                                    <i class="ti-lock font-size-20"></i>
+                                </button>
+                                <button type="button" th:if="${permission != null && curriculum.isActive == false
+                                && permission.canDelete == true}"
+                                        class="btn btn-outline-success  btn-icon btn-change-active-curriculum">
+                                    <i class="ti-unlock font-size-20"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <div th:if="${curriculums.content.size > 0}"
+         th:insert="common/paging :: pageData('/curriculums', ${curriculums})"></div>
+</div>

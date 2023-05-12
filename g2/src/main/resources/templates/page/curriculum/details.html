@@ -1,0 +1,58 @@
+<div class="mt-80" th:fragment="curriculum-details">
+    <div class="d-block" th:insert="common/sub-header :: sub-header"></div>
+    <div class="main-content px-30 pt-50 pb-40 mt-100">
+        <th:block th:switch="${subContent}">
+            <div th:case="'curriculum/overview'">
+                <div th:insert="page/curriculum/overview :: curriculum-overview(${curriculum}, ${loginRoles})"></div>
+            </div>
+            <div th:case="'curriculum/insert'">
+                <div th:insert="page/curriculum/insert :: curriculum-insert(${actionType}, ${curriculumForm}, ${loginRoles}, ${staffList}, ${decisions})"></div>
+            </div>
+            <div th:case="'curriculum/plos'">
+                <div th:insert="page/curriculum/Plos :: plo-list(${ploList}, ${request}, ${curriculumId}, ${loginRoles})"></div>
+            </div>
+            <div th:case="'curriculum/plos/insert'">
+                <div th:insert="page/curriculum/curriculum-plo-insert :: curriculum-plo-insert(${actionType}, ${ploForm}, ${loginRoles},${curriculumId})"></div>
+            </div>
+            <div th:case="'curriculum/pos'">
+                <div th:insert="page/curriculum/pos :: po-list(${poList}, ${request}, ${curriculumId}, ${loginRoles})"></div>
+            </div>
+            <div th:case="'curriculum/pos/insert'">
+                <div th:insert="page/curriculum/curriculum-po-insert :: curriculum-po-insert(${actionType}, ${poForm}, ${loginRoles},${curriculumId})"></div>
+            </div>
+            <div th:case="'curriculum/plo-pos'">
+                <div th:insert="page/curriculum/plo-pos :: plo-pos(${ploList}, ${poList}, ${curriculumId}, ${loginRoles})"></div>
+            </div>
+            <div th:case="'curriculum/plo-pos/details'">
+                <div th:insert="page/curriculum/plo-pos-details :: plo-pos-details(${ploList}, ${poList}, ${curriculumId})"></div>
+            </div>
+            <div th:case="'curriculum/subjects'">
+                <div th:insert="page/curriculum/subjects :: curriculum-subjects(${curriculumSubjects}, ${request})"></div>
+            </div>
+            <div th:case="'curriculum/subject-plos'">
+                <div th:insert="page/curriculum/subject-plos :: subject-plos(${ploSubjects}, ${subjectPlos})"></div>
+            </div>
+            <div th:case="'curriculum/subject-plos/details'">
+                <div th:insert="page/curriculum/subject-plos-details :: subject-plos-details(${ploSubjects}, ${subjectPlos})"></div>
+            </div>
+            <div th:case="'curriculum/elective'">
+                <div th:insert="page/curriculum/electives"></div>
+            </div>
+            <div th:case="'curriculum/electives/details'">
+                <div th:insert="page/curriculum/elective-details"></div>
+            </div>
+            <div th:case="'curriculum/group'">
+                <div th:insert="page/curriculum/group"></div>
+            </div>
+            <div th:case="'curriculum/group/details'">
+                <div th:insert="page/curriculum/group-details"></div>
+            </div>
+            <div th:case="'curriculum/combo'">
+                <div th:insert="page/curriculum/combos"></div>
+            </div>
+            <div th:case="'curriculum/combo/details'">
+                <div th:insert="page/curriculum/combo-details"></div>
+            </div>
+        </th:block>
+    </div>
+</div>

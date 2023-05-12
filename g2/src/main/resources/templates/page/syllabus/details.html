@@ -1,0 +1,22 @@
+<div class="mt-80" th:fragment="syllabus-details">
+    <div class="d-block" th:insert="common/sub-header :: sub-header"></div>
+    <div class="main-content px-30 pt-50 pb-40 mt-100">
+        <th:block th:switch="${subContent}">
+            <div th:case="'syllabus/overview'">
+                <div th:insert="page/syllabus/overview :: syllabus-overview(${syllabus})"></div>
+            </div>
+            <div th:case="'syllabus/overview/details'">
+                <div th:insert="page/syllabus/overview-details :: overview-details(${syllabus})"></div>
+            </div>
+            <div th:case="'syllabus/clos'">
+                <div th:insert="page/syllabus/clos :: clos(${clos})"></div>
+            </div>
+            <div th:case="'syllabus/cloplos'">
+                <div th:insert="page/syllabus/clo-plos :: clo-plos(${clos}, ${cloPlos})"></div>
+            </div>
+            <div th:case="'syllabus/cloplo/details'">
+                <div th:insert="page/syllabus/clo-plo-details :: clo-plo-details(${clos}, ${cloPlos})"></div>
+            </div>
+        </th:block>
+    </div>
+</div>

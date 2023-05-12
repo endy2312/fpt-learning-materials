@@ -1,0 +1,65 @@
+<div th:fragment="curriculum-overview(curriculum, loginRoles)">
+    <div class="font-size-18 font-weight-600 d-flex align-items-center justify-content-between ">
+        <ol class="breadcrumb mb-0 bg-unset pt-0">
+            <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i class="ti-home"></i></a>
+            </li>
+            <li class="breadcrumb-item active"><a th:href="@{/curriculums}" class="px-md-3 px-1">Curriculum Listing</a></li>
+            <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">Curriculum Details</a></li>
+        </ol>
+
+        <div class="d-flex align-items-center">
+            <a th:if="${loginRoles!= null && (loginRoles.contains('CRDD Head') || loginRoles.contains('CRDD Staff') || loginRoles.contains('Admin'))}"
+               th:href="@{/curriculum/insert(id=${curriculum.id})}"
+               class="btn btn-warning btn-icon btn-update-account font-size-18"><i
+                    class="ti-pencil-alt font-size-16 "></i></a>
+            <a th:if="${loginRoles!= null && (loginRoles.contains('CRDD Head') || loginRoles.contains('CRDD Staff') || loginRoles.contains('Admin'))}"
+               th:href="@{/curriculum/clone(id=${curriculum.id})}"
+               class="btn btn-info btn-icon font-size-18 ml-4"><i
+                    class="ti-layers-alt font-size-16 mr-3"></i>Clone</a>
+        </div>
+
+    </div>
+    <div class="main-content">
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Curriculum Code</span>
+            </div>
+            <div class="col-10">
+                <span class="" th:text="${curriculum.code == null ? '' : curriculum.code}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Name</span>
+            </div>
+            <div class="col-10">
+                <span class="" th:text="${curriculum.name== null ? '' : curriculum.name}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">English Name</span>
+            </div>
+            <div class="col-10">
+                <span class="" th:text="${curriculum.englishName == null ? '' : curriculum.englishName}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Description</span>
+            </div>
+            <div class="col-10">
+                <span class="pre-line" th:text="${curriculum.description == null ? '' : curriculum.description}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">DecisionNo MM/dd/yyyy</span>
+            </div>
+            <div class="col-10">
+        <span class="pre-line" th:text="${curriculum.decision == null || curriculum.decision.decisionNo == ''
+                        && curriculum.decision.decisionDate != null ? 'No data' : curriculum.decision.getCustomFormat}"></span>
+            </div>
+        </div>
+    </div>
+</div>

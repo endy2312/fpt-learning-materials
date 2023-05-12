@@ -1,0 +1,210 @@
+<div class="p-15" th:fragment="decisions">
+    <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+        <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+            <li class="breadcrumb-item "><a th:href="@{/}" class="pr-md-3 pl-1 pr-1 "><i class="ti-home"></i></a>
+            </li>
+            <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">Decision list </a></li>
+        </ol>
+    </div>
+    <div class="col-12 align-items-center pt-15">
+        <form th:action="@{/decisions}" id="utils-form" method="get">
+            <div class="row">
+                <div class="col-2">
+                    <div class="form-group d-flex">
+                        <input type="text"
+                               class="form-control border-right-0 rounded-right-0 bg-transparent text-dark border-secondary"
+                               placeholder="Search" name="keyword" th:value="${request.keyword}">
+                        <div class="input-append">
+                            <button class="btn btn-secondary btn-md btn-search rounded-left-0 border-secondary"
+                                    type="submit">
+                                <i class="ti-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group d-flex">
+                        <select class="form-control bg-transparent text-dark border-secondary" name="size"
+                                onchange="this.form.submit()">
+                            <option th:selected="${request.size == 10}" value="10">10 items</option>
+                            <option th:selected="${request.size == 20}" value="20"> 20 items</option>
+                            <option th:selected="${request.size == 50}" value="50"> 50 items</option>
+                            <option th:selected="${request.size == 100}" value="100"> 100 items</option>
+                            <option th:selected="${request.size == 200}" value="200"> 200 items</option>
+                        </select>
+                    </div>
+                </div>
+<!--                <div class="col-lg-2 col-md-3">-->
+<!--                    <div class="form-group row">-->
+<!--                        <label class="col-xxl-4 col-xl-6 col-md-6 my-auto">Is Active</label>-->
+<!--                        <select class="form-control col-xxl-8 col-xl-6 col-md-6 bg-transparent text-dark border-secondary"-->
+<!--                                id="is-active-select" name="active"-->
+<!--                                onchange="this.form.submit()">-->
+<!--                            <option th:selected="${request.active == null || request.active eq ''}" value="">All-->
+<!--                            </option>-->
+<!--                            <option th:selected="${request.active == false}" value="false">Active</option>-->
+<!--                            <option th:selected="${request.active == true}" value="true">Deactivate</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+            <input type="hidden" name="page" th:value="${decisions.number}" id="pageClicked">
+            <input type="hidden" th:value="${decisions.totalPages}" id="totalPage">
+            <input type="hidden" id="sort-by" name="sortBy" th:value="${#strings.arraySplit(request.sortBy,':')[0]}">
+            <input type="hidden" id="sort-type" name="sortType" th:value="${request.sortType}">
+        </form>
+    </div>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-2 d-flex justify-content-start align-items-end">
+                <div th:text="'Found ' + ${decisions.getTotalElements()} + ' items'"></div>
+            </div>
+            <div class="col-10 d-flex justify-content-end">
+                <a th:if="${canAdd == true}" th:href="@{/decision/insert}"
+                        class="btn btn-success">New Decision
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 mt-15">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th class="col-1">ID</th>
+                <th class="col-3">Decision Name
+                    <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'decisionName'}">
+                        <th:block th:switch="${request.sortType}">
+                            <th:block th:case="desc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="desc"
+                                        column="decisionName">
+                                    <i class="ti-angle-down"></i>
+                                </button>
+                            </th:block>
+                            <th:block th:case="asc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="asc"
+                                        column="decisionName">
+                                    <i class="ti-angle-up"></i>
+                                </button>
+                            </th:block>
+                        </th:block>
+                    </th:block>
+                    <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'decisionName'}">
+                        <button class="float-right border-0 bg-transparent sort-column" sort-type="none" column="decisionName">
+                            <i class="ti-exchange-vertical"></i>
+                        </button>
+                    </th:block>
+                </th>
+                <th class="col-1">Decision No
+                    <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'decisionNo'}">
+                        <th:block th:switch="${request.sortType}">
+                            <th:block th:case="desc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="desc"
+                                        column="decisionNo">
+                                    <i class="ti-angle-down"></i>
+                                </button>
+                            </th:block>
+                            <th:block th:case="asc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="asc"
+                                        column="decisionNo">
+                                    <i class="ti-angle-up"></i>
+                                </button>
+                            </th:block>
+                        </th:block>
+                    </th:block>
+                    <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'decisionNo'}">
+                        <button class="float-right border-0 bg-transparent sort-column" sort-type="none" column="decisionNo">
+                            <i class="ti-exchange-vertical"></i>
+                        </button>
+                    </th:block>
+                </th>
+                <th class="col-2">Approved Date
+                    <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'decisionDate'}">
+                        <th:block th:switch="${request.sortType}">
+                            <th:block th:case="desc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="desc"
+                                        column="decisionDate">
+                                    <i class="ti-angle-down"></i>
+                                </button>
+                            </th:block>
+                            <th:block th:case="asc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="asc"
+                                        column="decisionDate">
+                                    <i class="ti-angle-up"></i>
+                                </button>
+                            </th:block>
+                        </th:block>
+                    </th:block>
+                    <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'decisionDate'}">
+                        <button class="float-right border-0 bg-transparent sort-column" sort-type="none"
+                                column="decisionDate">
+                            <i class="ti-exchange-vertical"></i>
+                        </button>
+                    </th:block>
+                </th>
+                <th class="col-5">Note
+                    <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'note'}">
+                        <th:block th:switch="${request.sortType}">
+                            <th:block th:case="desc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="desc"
+                                        column="note">
+                                    <i class="ti-angle-down"></i>
+                                </button>
+                            </th:block>
+                            <th:block th:case="asc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="asc"
+                                        column="note">
+                                    <i class="ti-angle-up"></i>
+                                </button>
+                            </th:block>
+                        </th:block>
+                    </th:block>
+                    <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'note'}">
+                        <button class="float-right border-0 bg-transparent sort-column" sort-type="none"
+                                column="note">
+                            <i class="ti-exchange-vertical"></i>
+                        </button>
+                    </th:block>
+                </th>
+                <th class="col-1">Status</th>
+                <th th:if="${canEdit == true}" class="col-1">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="decision,stat : ${decisions}">
+                <th><span th:text="${stat.index + 1}"></span></th>
+                <td>
+                    <span th:text="${decision.decisionName}"></span>
+                </td>
+                <td>
+                    <span th:text="${decision.decisionNo}"></span>
+                </td>
+                <td>
+                    <span th:text="${decision.getCustomFormatDate}"></span>
+                </td>
+                <td>
+                    <span class="limit-text" th:text="${decision.note}"></span>
+                </td>
+                <td>
+                    <div th:if="${decision.deleteFlag == false}" class="status-badge bg-success-light" >
+                        <p class="d-inline-block m-0 text-success" >Activate</p>
+                    </div>
+                    <div th:if="${decision.deleteFlag == true}" class="status-badge bg-danger-light">
+                        <p class="d-inline-block m-0 text-danger">Deactivate</p>
+                    </div>
+                </td>
+                <td th:if="${canEdit == true}">
+                    <input type="hidden" th:value="${decision.deleteFlag}">
+                    <a th:href="@{/decision/insert(id=${decision.id})}" class="bg-transparent border-0"><i
+                            class="ti-eye font-size-16"></i></a>
+                </td>
+            </tr>
+            </form>
+            </tbody>
+        </table>
+        <div th:if="${decisions.content.size == 0}" class="d-flex justify-content-start text-danger">No decision
+            founded!!!
+        </div>
+        <div th:if="${decisions.content.size > 0}"
+             th:insert="common/paging :: pageData('/decisions', ${decisions})"></div>
+    </div>
+</div>

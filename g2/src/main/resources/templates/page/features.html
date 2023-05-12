@@ -1,0 +1,83 @@
+<div class="px-75 py-100" th:fragment="features">
+    <div class="row px-30">
+        <div class="col-md-3 col-sm-6 col-12 px-10 py-10">
+            <div class="box box-outline-warning h-200">
+                <div class="box-header">
+                    <h4 class="box-title bold">Guest</h4>
+                </div>
+                <div class="box-body">
+                    <div class="col-12">
+                        <a th:href="@{/curriculums}"><span>Curriculum List</span></a>
+                    </div>
+                    <div class="col-12">
+                        <a th:href="@{/subject/predecessors}"><span>Subject Predecessors</span></a>
+                    </div>
+
+                    <div class="col-12">
+                        <a th:href="@{/subject/successors}"><span>Subject Successors</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:each="role : ${session.loginRoles}">
+            <div class="col-md-3 col-sm-6 col-12 px-10 py-10">
+                <div class="box box-outline-warning h-200">
+                    <div class="box-header">
+                        <h4 class="box-title bold" th:text="${role}"></h4>
+                    </div>
+                    <div class="box-body">
+                        <th:block th:if="${role == 'Admin'}">
+                            <th:block th:each="feature : ${adminFeatures}">
+                                <div class="col-12">
+                                    <a th:href="@{${feature.url}}"><span th:text="${feature.hyperlink}"></span></a>
+                                </div>
+                            </th:block>
+                        </th:block>
+                        <th:block th:if="${role == 'Student'}">
+                            <th:block th:each="feature : ${studentFeatures}">
+                                <div class="col-12">
+                                    <a th:href="@{${feature.url}}"><span th:text="${feature.hyperlink}"></span></a>
+                                </div>
+                            </th:block>
+                        </th:block>
+                        <th:block th:if="${role == 'Teacher'}">
+                            <th:block th:each="feature : ${teacherFeatures}">
+                                <div class="col-12">
+                                    <a th:href="@{${feature.url}}"><span th:text="${feature.hyperlink}"></span></a>
+                                </div>
+                            </th:block>
+                        </th:block>
+                        <th:block th:if="${role == 'Syllabus Reviewer'}">
+                            <th:block th:each="feature : ${reviewerFeatures}">
+                                <div class="col-12">
+                                    <a th:href="@{${feature.url}}"><span th:text="${feature.hyperlink}"></span></a>
+                                </div>
+                            </th:block>
+                        </th:block>
+                        <th:block th:if="${role == 'Syllabus Designer'}">
+                            <th:block th:each="feature : ${designerFeatures}">
+                                <div class="col-12">
+                                    <a th:href="@{${feature.url}}"><span th:text="${feature.hyperlink}"></span></a>
+                                </div>
+                            </th:block>
+                        </th:block>
+                        <th:block th:if="${role == 'CRDD Staff'}">
+                            <th:block th:each="feature : ${staffFeatures}">
+                                <div class="col-12">
+                                    <a th:href="@{${feature.url}}"><span th:text="${feature.hyperlink}"></span></a>
+                                </div>
+                            </th:block>
+                        </th:block>
+                        <th:block th:if="${role == 'CRDD Head'}">
+                            <th:block th:each="feature : ${headFeatures}">
+                                <div class="col-12">
+                                    <a th:href="@{${feature.url}}"><span th:text="${feature.hyperlink}"></span></a>
+                                </div>
+                            </th:block>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+</div>

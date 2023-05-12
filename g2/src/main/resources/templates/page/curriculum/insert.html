@@ -1,0 +1,88 @@
+<div class="container" th:fragment="curriculum-insert(actionType, curriculumForm, loginRoles, staffList, decisions)">
+    <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+        <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+            <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i class="ti-home"></i></a>
+            </li>
+            <li class="breadcrumb-item active"><a th:href="@{/curriculums}" class="px-md-3 px-1">Curriculum Listing</a></li>
+            <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary"><span th:text="${actionType == 'isCreate' ? 'Create Curriculum' : (actionType == 'isUpdate' ? 'Update Curriculum' : 'Clone Curriculum')}"></span></a></li>
+        </ol>
+    </div>
+    <div class="pt-15">
+        <form th:action="@{/curriculum/insert}" method="post" id="curriculum-form">
+
+            <div class="row">
+                <div class="form-group">
+                    <input type="hidden" id="curriculumId" name="id" th:value="${curriculumForm.id}">
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="font-weight-700 font-size-16 required">Code</label>
+                        <input type="text" class="form-control  text-dark border-secondary"
+                               name="code" th:value="${curriculumForm.code}" title="Code is required">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="font-weight-700 font-size-16 required">Name</label>
+                        <input type="text" class="form-control  text-dark border-secondary"
+                               name="name" th:value="${curriculumForm.name}" title="Name is required">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="font-weight-700 font-size-16">English Name</label>
+                        <input type="text" class="form-control  text-dark border-secondary"
+                               name="englishName" th:value="${curriculumForm.englishName}">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="font-weight-700 font-size-16">Status</label>
+                        <div class="d-flex justify-content-around">
+                            <input type="radio" class="form-control" name="isActive" id="title-active"
+                                   value="activate" th:checked="${curriculumForm.isActive == 'activate'}">
+                            <label class="" for="title-active">Active</label>
+
+                            <input type="radio" class="form-control" name="isActive" id="title-deactivate"
+                                   value="deactivate" th:checked="${curriculumForm.isActive == 'deactivate'}">
+                            <label class="" for="title-deactivate">Deactive</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6" th:if="${actionType == 'isUpdate' && loginRoles.contains('CRDD Head') || loginRoles.contains('Admin')}">
+                    <div class="form-group">
+                        <label>Staff</label>
+                        <select class="form-control select2 select2-hidden-accessible" name="userId" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                            <option selected="selected">Select a Staff</option>
+                            <option th:each="staff : ${staffList}" th:value="${staff.id}"
+                                    th:text="${staff.fullName}" th:selected="${curriculumForm.userId != null && staff.id == curriculumForm.userId}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6" th:if="${actionType == 'isUpdate'}">
+
+                    <div class="form-group">
+                        <label>Decision</label>
+                        <input th:if="${curriculumForm.decisionId != null}" type="text" class="form-control  text-dark border-secondary"
+                               name="decision" th:value="${curriculumForm.decisionNo}" readonly>
+                        <select th:if="${curriculumForm.decisionId == null}" class="form-control select2 select2-hidden-accessible" name="decisionId" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                            <option selected="selected">Select a Decision</option>
+                            <option th:each="decision : ${decisions}" th:value="${decision.id}"
+                                    th:text="${decision.getCustomFormat}" ></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="font-weight-700 font-size-16">Description</label>
+                        <textarea class="form-control  text-dark border-secondary p-20 pre-line" name="description"
+                                  rows="15" th:value="${curriculumForm.description}" th:text="${curriculumForm.description}"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions mt-10 px-3">
+                <button type="button" class="btn btn-success" id="btn-submit-curriculum">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

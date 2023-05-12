@@ -1,0 +1,123 @@
+<div class="container-fluid" th:fragment="combo-details">
+    <div class="row">
+        <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+            <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+                <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i
+                        class="ti-home"></i></a>
+                </li>
+                <li class="breadcrumb-item active"><a th:href="@{'/curriculum/combos?id=' + ${curriculum.id}}"
+                                                      class="px-md-3 px-1">Combo Management</a>
+                </li>
+                <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">Combo Details</a>
+                </li>
+            </ol>
+        </div>
+        <div class="col-12 mb-2">
+            <button th:if="${canEdit}" id="btn-update-combo" class="btn btn-github float-right btn-md">Save</button>
+        </div>
+        <div class="col-12 mb-4">
+            <div class="table-responsive">
+                <form id="form-update-combo">
+                    <table class="table table-light table-bordered border">
+                        <input type="hidden" id="comboId" th:value="${combo.id}">
+                        <tr>
+                            <th class="col-2 required">Combo Code</th>
+                            <td><span th:unless="${canEdit}" th:text="${combo.code}">  </span>
+                                <input th:if="${canEdit}" name="code" id="combo-code" type="text"
+                                       class="form-control focus-input"
+                                       th:value="${combo.code}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="col-2 required">Combo Name</th>
+                            <td><span th:unless="${canEdit}" th:text="${combo.name}"></span>
+                                <input name="name" th:if="${canEdit}" id="combo-name" type="text"
+                                       class="form-control focus-input"
+                                       th:value="${combo.name}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="col-2">Note</th>
+                            <td>
+                                <span th:unless="${canEdit}" th:text="${combo.description}"></span>
+                                <input th:if="${canEdit}" id="combo-description" type="text"
+                                       class="form-control focus-input" th:value="${combo.description}">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="col-12 mb-4 d-flex justify-content-between">
+            <span class="font-weight-600 font-size-22"><u>Subject List</u></span>
+            <button th:if="${canAdd}" class="btn btn-github btn-md float-right" data-target="#insert-subject"
+                    data-toggle="modal">Insert
+                subject
+            </button>
+        </div>
+        <div class="col-12 mb-4">
+            <div class="table-responsive">
+                <table class="table table-light table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th> Id</th>
+                        <th> Subject Code</th>
+                        <th> Subject Name</th>
+                        <th th:if="${canDelete}"></th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="subject,stat: ${childrenCombo}">
+                    <tr>
+                        <td th:text="${stat.index + 1}"></td>
+                        <td th:text="${subject.code}"></td>
+                        <td><a th:href="@{/subject/details(id=${subject.id})}"><u th:text="${subject.name}"></u></a></td>
+                        <td th:if="${canDelete}" class="text-center">
+                            <input type="hidden" id="combo-id" th:value="${combo.id}">
+                            <input type="hidden" id="curriculum-id" th:value="${curriculum.id}">
+                            <a class="text-danger delete-combo-subject" th:attr="subject-id=${subject.id}" href="#">
+                                <u>Remove</u></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="text-danger text-center" th:if="${childrenCombo.size == 0 && canEdit}">Please add more subject to
+                    this combo
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:if="${canAdd}" class="modal center-modal fade" id="insert-subject"
+         style="display: block;"
+         aria-modal="true">
+        <div class="modal-dialog">
+            <form th:action="@{/combo/detail/insert}" id="form-existed" method="post"
+                  class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Insert Subject</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <input type="hidden" th:value="${curriculum.id}" name="curriculumId">
+                <input type="hidden" th:value="${combo.id}" name="id">
+                <div class="modal-body">
+                    <input name="curriculumId" type="hidden" th:value="${curriculum.id}">
+                    <div class="form-group">
+                        <label>Choose Subject<span class="error vertical-align-sub ml-1">*</span></label>
+                        <select name="ids" multiple="multiple"
+                                class="form-control select2 select2-hidden-accessible"
+                                style="width: 100%;">
+                            <th:block th:each="subject : ${subjectsSelect}">
+                                <option th:value="${subject.id}" th:text="${subject.code}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-uniform">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary float-right" id="btn-submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

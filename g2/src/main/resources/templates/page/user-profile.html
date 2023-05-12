@@ -1,0 +1,169 @@
+<div class="container mt-20"
+     th:fragment="profile(userForm, title, roleList, userRoleNames, errorMobileMessage, errorEmailMessage, errorVerifyCodeMessage )">
+    <section class="content">
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <div class="row">
+                    <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+                        <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+                            <li class="breadcrumb-item "><a th:href="@{/}" class="pr-md-3 pl-1 pr-1 "><i class="ti-home"></i></a>
+                            </li>
+                            <li th:if="${title == 'isUpdate' || title == 'isCreate'}" class="breadcrumb-item "><a th:href="@{/accounts}" class="pr-md-3 pl-1 pr-1 ">User List</a>
+                            </li>
+                            <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">
+                                <span th:text="${title == 'isCreate' ? 'Create account' : (title == 'isUpdate' ? 'Update account' : title)}">
+                                </span></a>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <form class="form row"
+                          th:id="${title == 'isCreate' || title == 'isUpdate' ? 'create-account-form' : 'user-profile-form'}"
+                          th:action="@{${title == 'isCreate' || title == 'isUpdate' ? '/account/insert' : '/user/profile'}}"
+                          th:object="${userForm}"
+                          enctype="multipart/form-data"
+                          method="post">
+                        <div class="col-7">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control" name="id" id="profile-id"
+                                           th:value="${userForm.id}">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control" name="signupType"
+                                           th:value="${userForm.signupType}">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="required" for="fullName">Full name</label>
+                                    <input type="text" class="form-control" name="fullName" id="fullName"
+                                           th:value="${userForm.fullName}"
+                                           placeholder="" title="Full name is required">
+
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group" id="container-profile-input-verify">
+                                    <label th:class="${title == 'isCreate' || title == 'isUpdate' || userForm.signupType == 'google'
+                                                   || userForm.signupType == 'email' ? 'required' : ''}" for="email">Email</label>
+                                    <input type="email" class="form-control" name="email" id="email"
+                                           placeholder="you@fpt.edu.vn" title="Email is required"
+                                           th:value="${userForm.email}"
+                                           th:readonly="${title == 'isCreate' ? false :
+                                           userForm.signupType == 'google' || userForm.signupType == 'email'}">
+                                    <label class="text-danger"
+                                           th:if="${errorMailMessage != null && errorMailMessage != ''}"
+                                           th:text="${errorMailMessage}"></label>
+                                </div>
+                            </div>
+                            <div class="col-12" th:if="${title != 'isCreate'}">
+                                <div class="form-group">
+                                    <label th:class="${userForm.signupType == 'mobile' ? 'required' : ''}" for="mobile">Mobile</label>
+                                    <input type="text" class="form-control" name="mobile" id="mobile"
+                                           th:value="${userForm.mobile}"
+                                           th:disabled="${userForm.signupType == 'mobile'}"
+                                           placeholder="enter mobile">
+                                    <span class="text-danger" th:text="${errorMobileMessage}"></span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group mb-0">
+                                    <label for="verifyCode">Verification Code</label>
+                                    <div class="input-group mb-0 d-flex">
+                                        <input type="text" name="verifyCode" id="verifyCode"
+                                               class="form-control bg-transparent text-dark"
+                                               placeholder="">
+                                        <span class="input-group-append "><button
+                                                class="btn btn-info font-size-14 btn-sm rounded-right"
+                                                type-verify="email" type="button"
+                                                th:id="${title == 'isCreate' ? 'btn-profile-send-email' : 'btn-profile-send-mobile'}">Send</button></span>
+                                    </div>
+                                    <label id="verifyCode-error" class="error" for="verifyCode"></label>
+                                    <div class="text-danger text-center" th:text="${errorVerifyCodeMessage}"></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="">Title</label>
+                                    <div class="input-group d-flex justify-content-around">
+                                        <input type="radio" class="form-control" name="title" id="title-mr"
+                                               value="Mr" th:checked="${userForm.title == 'Mr'}">
+                                        <label class="" for="title-mr">Mr</label>
+                                        <input type="radio" class="form-control" name="title" id="title-mrs"
+                                               value="Mrs" th:checked="${userForm.title == 'Mrs'}">
+                                        <label class="" for="title-mrs">Mrs</label>
+                                        <input type="radio" class="form-control" name="title" id="title-ms"
+                                               value="=Ms" th:checked="${userForm.title == 'Ms'}">
+                                        <label class="" for="title-ms">Ms</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="" for="organization">Company/Organization</label>
+                                    <input type="text" class="form-control" name="organization" id="organization"
+                                           th:value="${userForm.organization}">
+                                </div>
+                            </div>
+                            <div class="col-12" th:if="${title == 'isCreate' || title == 'isUpdate'}">
+                                <div class="form-group">
+                                    <label class="required">User role</label>
+                                    <select class="form-control select2 select2-hidden-accessible border-black"
+                                            multiple=""
+                                            data-placeholder="Select role" style="width: 100%;" tabindex="-1"
+                                            name="userRoleIds" id="userRoleIds"
+                                            aria-hidden="true" title="User role is required">
+                                        <option th:each="role : ${roleList}" th:value="${role.id}"
+                                                th:text="${role.title}"
+                                                th:selected="${userRoleNames.contains(role.title)}">Role name
+                                        </option>
+                                    </select>
+                                    <label id="userRoleIds-error" class="error" for="userRoleIds"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="text-center mb-30">
+                                <img id="profile-img" th:src="${userForm.image != null ?
+                                userForm.image : 'http://ssl.gstatic.com/accounts/ui/avatar_2x.png'}"
+                                     class="avatar-profile img-circle img-thumbnail mb-15" alt="avatar">
+                                <div class="d-flex">
+                                    <input accept="image/png, image/gif, image/jpeg" type="file" id="image-file" name="imageUpload">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div class="d-flex justify-content-between">
+                                        <label class="" for="username">Username</label>
+                                        <a href="" class="text-underline">Change password</a>
+                                    </div>
+                                    <input type="text" class="form-control" name="username" id="username"
+                                           th:value="${userForm.username}" title="Username is required">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="" for="organization">Job Title</label>
+                                    <input type="text" class="form-control" name="jobTitle" id="jobTitle"
+                                           th:value="${userForm.jobTitle}">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-12 mt-10">
+                            <button class="btn btn-success ml-10" type="submit" id="userProfileBtn">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="text-danger text-center" th:text="${updateProfileError}"></div>
+                <div class="text-danger text-center" th:text="${errorMobileMessage}"></div>
+                <div class="text-danger text-center" th:text="${errorVerifyCodeMessage}"></div>
+                <div class="text-success text-center" th:text="${updateProfileSuccess}"></div>
+            </div>
+        </div>
+    </section>
+</div>

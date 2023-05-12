@@ -1,0 +1,75 @@
+<aside th:fragment="sidebar(menu,subMenu)" class="main-sidebar">
+    <!-- sidebar-->
+    <section class="sidebar">
+        <div class="user-profile px-10 py-15">
+            <div class="d-flex align-items-center">
+                <div class="image">
+                    <img src="https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg"
+                         class="avatar avatar-lg" alt="User Image">
+                </div>
+                <div class="info ml-10">
+                    <p class="mb-0">Xin chào</p>
+                    <h5 class="mb-0" th:text="${principal.getUsername()}"></h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- sidebar menu-->
+        <ul class="sidebar-menu " data-widget="tree">
+            <li th:class="${menu eq 'curricula' ? 'active' : ''}">
+                <a th:href="@{/curricula}">
+                    <i class="ti-dashboard"></i>
+                    <span>View Curriculum</span>
+                </a>
+            </li>
+            <li th:class="${menu eq 'predecessor' ? 'active' : ''}">
+                <a th:href="@{/predecessor}">
+                    <i class="ti-"></i>
+                    <span>Subject Predecessors</span>
+                </a>
+            </li>
+            <li th:class="${menu == 'succession' ? 'active' : ''}">
+                <a th:href="@{/succession}">
+                    <i class="ti-check"></i>
+                    <span>Subject Successors</span>
+                </a>
+            </li>
+            <li th:class="${menu == 'syllabus' ? 'active' : ''}">
+                <a th:href="@{/syllabus}">
+                    <i class="ti-book"></i>
+                    <span>View Training Syllabus</span>
+                </a>
+            </li>
+            <li th:class="${menu == 'dashboard' ? 'active treeview' : 'treeview'}">
+                <a href="#">
+                    <i class="ti-dashboard"></i>
+                    <span>Dashboard</span>
+                    <span class="pull-right-container">
+                          <i class="ti-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li th:class="${subMenu eq 'system-setting' ? 'active' :''}"><a th:href="@{/system-setting}" ><i class="ti-more"></i>System Settings</a></li>
+                    <li th:class="${subMenu eq 'permission-setting' ? 'active' :''}"><a th:href="@{/dashboard/permissions}" ><i class="ti-more"></i>Role Permission</a></li>
+                    <li><a href="contact_app_chat.html"><i class="ti-more"></i>User Management</a></li>
+                    <li><a href="extra_taskboard.html"><i class="ti-more"></i>Training Curriculums</a></li>
+                    <li><a href="extra_taskboard.html"><i class="ti-more"></i>Subject Management</a></li>
+                    <li><a href="extra_taskboard.html"><i class="ti-more"></i>Syllabus Designing</a></li>
+                    <li><a href="extra_taskboard.html"><i class="ti-more"></i>Material Decisions</a></li>
+
+                </ul>
+            </li>
+        </ul>
+    </section>
+    <div class="sidebar-footer">
+        <!-- item-->
+        <a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Settings"
+           aria-describedby="tooltip92529"><i class="ti-settings"></i></a>
+        <!-- item-->
+        <a href="mailbox_inbox.html" class="link" data-toggle="tooltip" title="" data-original-title="Email"><i
+                class="ti-email"></i></a>
+        <!-- item-->
+        <a href="javascript:void(0)" class="link" data-toggle="tooltip" title="" data-original-title="Logout"><i
+                class="ti-lock"></i></a>
+    </div>
+</aside>

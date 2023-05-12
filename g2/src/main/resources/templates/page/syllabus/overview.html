@@ -1,0 +1,201 @@
+<div th:fragment="syllabus-overview(syllabus)">
+    <div class="font-size-18 font-weight-600 d-flex align-items-center">
+        <div class="col-6 d-flex justify-content-start">
+            <ol class="breadcrumb mb-0 mt-4 bg-unset p-0">
+                <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1"><i class="ti-home"></i></a>
+                </li>
+                <li class="breadcrumb-item active"><a th:href="@{/syllabi}" class="px-md-3 px-1">Syllabus List</a>
+                </li>
+                <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">Syllabus Details</a></li>
+            </ol>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
+            <th:block th:if="${syllabus.syllabus.status eq 'Add New'}">
+                <th:block th:if="${#lists.contains(session.loginRoles, 'Syllabus Designer') && canEdit == true}">
+                    <a type="button" class="btn btn-md btn-rounded btn-info h-35" href="#">Submit</a>
+                    <a type="button" class="btn btn-md btn-rounded btn-github h-35 ml-2" th:href="@{/syllabus/details(id=${syllabus.syllabus.id})}">Edit</a>
+                </th:block>
+                <th:block th:if="${(#lists.contains(session.loginRoles, 'CRDD Head') || #lists.contains(session.loginRoles, 'CRDD Staff')) && canEdit == true}">
+                    <a type="button" class="btn btn-md btn-rounded btn-github h-35 ml-2" th:href="@{/syllabus/details(id=${syllabus.syllabus.id})}">Edit</a>
+                </th:block>
+            </th:block>
+            <th:block th:if="${syllabus.syllabus.status eq 'Submitted'}">
+                <th:block th:if="${#lists.contains(session.loginRoles, 'Syllabus Designer') && canEdit == true}">
+                    <a type="button" class="btn btn-md btn-rounded btn-info h-35" href="#">Re-submit</a>
+                </th:block>
+                <th:block th:if="${#lists.contains(session.loginRoles, 'Syllabus Reviewer') && canEdit == true}">
+                    <a type="button" class="btn btn-md btn-rounded btn-info h-35" href="#">Review</a>
+                </th:block>
+                <th:block th:if="${#lists.contains(session.loginRoles, 'CRDD Staff') && canEdit == true}">
+                    <a type="button" class="btn btn-md btn-rounded btn-info h-35" href="#">Verify</a>
+                    <a type="button" class="btn btn-md btn-rounded btn-github h-35 ml-2" th:href="@{/syllabus/details(id=${syllabus.syllabus.id})}">Edit</a>
+                </th:block>
+            </th:block>
+            <th:block th:if="${syllabus.syllabus.status eq 'Verified'}">
+                <th:block th:if="${#lists.contains(session.loginRoles, 'CRDD Staff') && canEdit == true}">
+                    <a type="button" class="btn btn-md btn-rounded btn-github h-35" th:href="@{/syllabus/details(id=${syllabus.syllabus.id})}">Edit</a>
+                </th:block>
+                <th:block th:if="${#lists.contains(session.loginRoles, 'CRDD Head') && canDelete == true}">
+                    <a class="changeSyllabusStatus mr-2 btn btn-md btn-rounded btn-success" type="button" th:attr="syllabus-id=${syllabus.syllabus.id}">Approve</a>
+                    <a class="changeSyllabusStatus btn btn-md btn-rounded btn-danger" type="button" th:attr="syllabus-id=${syllabus.syllabus.id}">Disapprove</a>
+                    <a type="button" class="btn btn-md btn-rounded btn-github h-35 ml-2" th:href="@{/syllabus/details(id=${syllabus.syllabus.id})}">Edit</a>
+                </th:block>
+            </th:block>
+            <th:block th:if="${syllabus.syllabus.status eq 'Approved'}">
+                <th:block th:if="${#lists.contains(session.loginRoles, 'CRDD Head') && canDelete == true}">
+                    <a class="changeSyllabusStatus btn btn-md btn-rounded btn-danger" type="button" th:attr="syllabus-id=${syllabus.syllabus.id}">Disapprove</a>
+                    <a type="button" class="btn btn-md btn-rounded btn-github h-35 ml-2" th:href="@{/syllabus/details(id=${syllabus.syllabus.id})}">Edit</a>
+                </th:block>
+            </th:block>
+            <th:block th:if="${syllabus.syllabus.status eq 'Disapproved'}">
+                <th:block th:if="${#lists.contains(session.loginRoles, 'CRDD Head') && canDelete == true}">
+                    <a class="changeSyllabusStatus mr-2 btn btn-md btn-rounded btn-success" type="button" th:attr="syllabus-id=${syllabus.syllabus.id}">Approve</a>
+                    <a type="button" class="btn btn-md btn-rounded btn-github h-35 ml-2" th:href="@{/syllabus/details(id=${syllabus.syllabus.id})}">Edit</a>
+                </th:block>
+            </th:block>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Syllabus Name</span>
+            </div>
+            <div class="col-10">
+                <span class="" th:text="${syllabus.syllabus.name == null ? '' : syllabus.syllabus.name}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Syllabus English</span>
+            </div>
+            <div class="col-10">
+                <span class=""></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Subject Code</span>
+            </div>
+            <div class="col-10">
+                <span class="" th:text="${syllabus.syllabus.subject == null ? '' : syllabus.syllabus.subject.code}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">NoCredit</span>
+            </div>
+            <div class="col-10">
+                <span class="pre-line" th:text="${syllabus.syllabus.noCredit == null ? '' : syllabus.syllabus.noCredit}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Degree Level</span>
+            </div>
+            <div class="col-10">
+                <span class="pre-line" th:text="${syllabus.syllabus.degreeLevel == null ? '' : syllabus.syllabus.degreeLevel.title}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Time Allocation</span>
+            </div>
+            <div class="col-10">
+                <span class="pre-line" th:text="${syllabus.syllabus.timeAllocation == null ? '': syllabus.syllabus.timeAllocation}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Predecessors</span>
+            </div>
+            <div class="col-10">
+                <span class="pre-line" th:text="${syllabus.predecessors == null ? '' : syllabus.predecessors}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Description</span>
+            </div>
+            <div class="col-10">
+                <span class="pre-line" th:text="${syllabus.syllabus.subject == null ? '' : (syllabus.syllabus.subject.description == null ? '' : syllabus.syllabus.subject.description)}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Predecessors</span>
+            </div>
+            <div class="col-10">
+                <span class="pre-line" th:text="${syllabus.predecessors == null ? '' : syllabus.predecessors}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Student Tasks</span>
+            </div>
+            <div class="col-10">
+                <span class="pre-line" th:text="${syllabus.syllabus.studentTasks == null ? '' : syllabus.syllabus.studentTasks}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Tools</span>
+            </div>
+            <div class="col-10">
+                <span class="pre-line" th:text="${syllabus.syllabus.tools == null ? '' : syllabus.syllabus.tools}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Scoring Scale</span>
+            </div>
+            <div class="col-10">
+                <span class="pre-line" th:text="${syllabus.syllabus.scoringScale == null ? '' : syllabus.syllabus.scoringScale}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">DecisionNo MM/dd/yyyy</span>
+            </div>
+            <div class="col-10">
+                <span class="pre-line" th:text="${syllabus.syllabus.decision == null || syllabus.syllabus.decision.decisionNo == ''
+                        && syllabus.syllabus.decision.decisionDate != null ? 'No data' : syllabus.syllabus.decision.getCustomFormat}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">Note</span>
+            </div>
+            <div class="col-10">
+                <span class="pre-line" th:text="${syllabus.syllabus.note == null ? '' : syllabus.syllabus.note}"></span>
+            </div>
+        </div>
+        <div class="row p-2 border-bottom">
+            <div class="col-2 border-right">
+                <span class="">MinAvgMarkToPass</span>
+            </div>
+            <div class="col-10">
+                <span class="pre-line" th:text="${syllabus.syllabus.minAvg == null ? '' : syllabus.syllabus.minAvg}"></span>
+            </div>
+        </div>
+        <th:block th:if="${canEdit == true}">
+            <div class="row p-2 border-bottom">
+                <div class="col-2 border-right">
+                    <span class="">Status</span>
+                </div>
+                <div class="col-10">
+                    <span class="pre-line" th:text="${syllabus.syllabus.status == null ? '' : syllabus.syllabus.status}"></span>
+                </div>
+            </div>
+            <th:block th:if="${#lists.contains(session.loginRoles, 'CRDD Head') && canDelete == true && syllabus.syllabus.status eq 'Approved'}">
+                <div class="row p-2 border-bottom">
+                    <div class="col-2 border-right">
+                        <span class="">Approved Date</span>
+                    </div>
+                    <div class="col-10">
+                        <span class="pre-line" th:text="${syllabus.syllabus.approvedDate == null ? '' : syllabus.syllabus.getCustomFormat}"></span>
+                    </div>
+                </div>
+            </th:block>
+        </th:block>
+    </div>
+</div>

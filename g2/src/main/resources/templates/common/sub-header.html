@@ -1,0 +1,62 @@
+<div th:fragment="sub-header" class="px-30 sub-header">
+    <nav class="navbar bg-secondary-light navbar-expand-lg navbar-light rounded10">
+        <th:block th:if="${curriculumName != null && curriculumPages.size() > 0}">
+            <div class="w-auto text-center">
+                <p class="mb-1 font-italic font-size-12">Curriculum Details</p>
+                <span class="font-weight-bold font-size-16" th:text="${curriculumName}">Details</span>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="row collapse navbar-collapse pl-4" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto position-relative text-bold col-12 d-flex justify-content-center">
+                    <th:block th:each="page : ${curriculumPages}">
+                        <th:block th:if="${pageTitle != null && pageTitle == page.pageTitle}">
+                            <li class="nav-item pr-50">
+                                <a class="nav-link active" th:href="@{${page.hyperlink + '?id=' + curriculumId}}" th:text="${page.pageTitle}"></a>
+                            </li>
+                            <li class="nav-item pr-50" th:if="${pageAction != null && pageAction != ''}">
+                                <a class="nav-link active" href="#" th:text="${pageAction}"></a>
+                            </li>
+                        </th:block>
+                        <th:block th:unless="${pageTitle != null && pageTitle == page.pageTitle}">
+                            <li class="nav-item pr-50">
+                                <a class="nav-link" th:href="@{${page.hyperlink + '?id=' + curriculumId}}" th:text="${page.pageTitle}"></a>
+                            </li>
+                        </th:block>
+                    </th:block>
+                </ul>
+            </div>
+        </th:block>
+        <th:block th:if="${syllabusName != null && syllabusPages.size() > 0}">
+            <div class="w-auto text-center">
+                <p class="mb-1 font-italic font-size-12">Syllabus Details</p>
+                <span class="font-weight-bold font-size-16" th:text="${syllabusName}">Details</span>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="row collapse navbar-collapse pl-4">
+                <ul class="navbar-nav mr-auto position-relative text-bold col-12 d-flex justify-content-center">
+                    <th:block th:each="page : ${syllabusPages}">
+                        <th:block th:if="${pageTitle != null && pageTitle == page.pageTitle}">
+                            <li class="nav-item pr-50">
+                                <a class="nav-link active" th:href="@{${page.hyperlink + '?id=' + syllabusId}}" th:text="${page.pageTitle}"></a>
+                            </li>
+                            <li class="nav-item pr-50" th:if="${pageAction != null && pageAction != ''}">
+                                <a class="nav-link active" href="#" th:text="${pageAction}"></a>
+                            </li>
+                        </th:block>
+                        <th:block th:unless="${pageTitle != null && pageTitle == page.pageTitle}">
+                            <li class="nav-item pr-50">
+                                <a class="nav-link" th:href="@{${page.hyperlink + '?id=' + syllabusId}}" th:text="${page.pageTitle}"></a>
+                            </li>
+                        </th:block>
+                    </th:block>
+                </ul>
+            </div>
+        </th:block>
+    </nav>
+</div>

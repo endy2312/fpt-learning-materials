@@ -1,0 +1,118 @@
+<div class="container-fluid" th:fragment="combo">
+    <div class="row">
+        <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+            <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+                <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i
+                        class="ti-home"></i></a>
+                </li>
+                <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">Combo Management</a>
+                </li>
+            </ol>
+        </div>
+        <div class=" col-12 mb-4">
+        </div>
+        <div class="col-12 mb-2">
+            <span class="font-weight-600 font-size-22"><u>Combo List</u></span>
+            <button th:if="${canAdd}" class="btn btn-github btn-md float-right rounded20" data-target="#add-combo"
+                    data-toggle="modal">
+                Add Combo
+            </button>
+            <button th:if="${canAdd}" class="btn btn-github btn-md float-right mr-4" data-target="#existed-combo"
+                    data-toggle="modal">
+                Choose Existed
+            </button>
+        </div>
+        <div class="col-12 mb-4">
+            <div class="table-responsive">
+                <table class="table table-bordered table-light">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th> Combo Name</th>
+                        <th> Subject</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="combo,stat : ${combos}">
+                        <tr>
+                            <td th:text="${stat.index + 1}"></td>
+                            <td th:text="${combo.code}"></td>
+                            <td>
+                                <a th:href="@{'/combo/details?id='+${combo.id} +'&&curriculumId='+${curriculumId}}"><u
+                                        th:text="${combo.name}"></u></a></td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal center-modal fade" id="add-combo"
+         style="display: block;"
+         aria-modal="true">
+        <div class="modal-dialog">
+            <form th:action="@{/curriculum/combos/insert}" method="post" id="form-add-combo"
+                  class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Combo</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input name="curriculumId" id="curriculumId" type="hidden" th:value="${curriculumId}">
+                    <div class="form-group">
+                        <label>Combo Code<span class="error vertical-align-sub ml-1">*</span></label>
+                        <input name="code" id="combo-code" type="text" class="form-control"
+                               placeholder="Combo Code">
+                    </div>
+                    <div class="form-group">
+                        <label>Combo Name<span class="error vertical-align-sub ml-1">*</span></label>
+                        <input name="name" type="text" class="form-control"
+                               placeholder="Combo Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Note</label>
+                        <textarea name="note" type="text" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-uniform">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary float-right" id="btn-add-combo">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal center-modal fade" id="existed-combo"
+         style="display: block;"
+         aria-modal="true">
+        <div class="modal-dialog">
+            <form th:action="@{/curriculum/combos/add}" method="post" id="form-existed-combo"
+                  class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Existed Combo</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input name="curriculumId" type="hidden" th:value="${curriculumId}">
+                    <div class="form-group">
+                        <label>Choose Existed Combo<span class="error vertical-align-sub ml-1">*</span></label>
+                        <select name="comboId" class="form-control select2 select2-hidden-accessible"
+                                style="width: 100%;">
+                            <th:block th:each="combo : ${comboExisted}">
+                                <option th:value="${combo.id}" th:text="${combo.code+' - '+combo.name}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-uniform">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary float-right" id="btn-combo-existed">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

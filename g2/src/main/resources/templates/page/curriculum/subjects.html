@@ -1,0 +1,355 @@
+<div th:fragment="curriculum-subjects(curriculumSubjects, request)">
+    <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+        <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+            <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i class="ti-home"></i></a>
+            </li>
+            <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">Curriculum Subjects</a>
+            </li>
+        </ol>
+    </div>
+    <div class="col-12 align-items-center pt-15">
+        <form th:action="@{/curriculum/subjects}" id="utils-form" method="get">
+            <input type="hidden" name="id" th:value="${request.id}">
+            <input type="hidden" id="sort-by" name="sortBy" th:value="${#strings.arraySplit(request.sortBy,':')[0]}">
+            <input type="hidden" id="sort-type" name="sortType" th:value="${request.sortType}">
+        </form>
+    </div>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-2 d-flex justify-content-start align-items-end">
+                <div th:text="${curriculumSubjects.size()} + ' subjects'"></div>
+            </div>
+            <th:block th:if="${canAdd == true}">
+                <div class="col-10 d-flex justify-content-end">
+                    <button type="button" class="btn btn-md btn-rounded btn-primary h-35"
+                            data-target="#modal-subject-new" data-toggle="modal">Insert Subject
+                    </button>
+                </div>
+            </th:block>
+        </div>
+    </div>
+    <div class="col-12 mt-15">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col" class="min-w-150">Subject Code
+                    <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'subject.code'}">
+                        <th:block th:switch="${request.sortType}">
+                            <th:block th:case="desc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="desc"
+                                        column="subject.code">
+                                    <i class="ti-angle-down"></i>
+                                </button>
+                            </th:block>
+                            <th:block th:case="asc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="asc"
+                                        column="subject.code">
+                                    <i class="ti-angle-up"></i>
+                                </button>
+                            </th:block>
+                        </th:block>
+                    </th:block>
+                    <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'subject.code'}">
+                        <button class="float-right border-0 bg-transparent sort-column" sort-type="none"
+                                column="subject.code">
+                            <i class="ti-exchange-vertical"></i>
+                        </button>
+                    </th:block>
+                </th>
+                <th scope="col">Subject Name
+                    <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'subject.name'}">
+                        <th:block th:switch="${request.sortType}">
+                            <th:block th:case="desc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="desc"
+                                        column="subject.name">
+                                    <i class="ti-angle-down"></i>
+                                </button>
+                            </th:block>
+                            <th:block th:case="asc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="asc"
+                                        column="subject.name">
+                                    <i class="ti-angle-up"></i>
+                                </button>
+                            </th:block>
+                        </th:block>
+                    </th:block>
+                    <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'subject.name'}">
+                        <button class="float-right border-0 bg-transparent sort-column" sort-type="none"
+                                column="subject.name">
+                            <i class="ti-exchange-vertical"></i>
+                        </button>
+                    </th:block>
+                </th>
+                <th scope="col" class="min-w-120">Semester
+                    <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'semester'}">
+                        <th:block th:switch="${request.sortType}">
+                            <th:block th:case="desc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="desc"
+                                        column="semester">
+                                    <i class="ti-angle-down"></i>
+                                </button>
+                            </th:block>
+                            <th:block th:case="asc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="asc"
+                                        column="semester">
+                                    <i class="ti-angle-up"></i>
+                                </button>
+                            </th:block>
+                        </th:block>
+                    </th:block>
+                    <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'semester'}">
+                        <button class="float-right border-0 bg-transparent sort-column" sort-type="none"
+                                column="semester">
+                            <i class="ti-exchange-vertical"></i>
+                        </button>
+                    </th:block>
+                </th>
+                <th scope="col" class="min-w-120">NoCredit
+                    <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'noCredit'}">
+                        <th:block th:switch="${request.sortType}">
+                            <th:block th:case="desc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="desc"
+                                        column="noCredit">
+                                    <i class="ti-angle-down"></i>
+                                </button>
+                            </th:block>
+                            <th:block th:case="asc">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="asc"
+                                        column="noCredit">
+                                    <i class="ti-angle-up"></i>
+                                </button>
+                            </th:block>
+                        </th:block>
+                    </th:block>
+                    <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'noCredit'}">
+                        <button class="float-right border-0 bg-transparent sort-column" sort-type="none"
+                                column="noCredit">
+                            <i class="ti-exchange-vertical"></i>
+                        </button>
+                    </th:block>
+                </th>
+                <th scope="col">Predecessors</th>
+                <th:block th:if="${canEdit== true}">
+                    <th class="col-1">Status
+                        <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'deleteFlag'}">
+                            <th:block th:switch="${request.sortType}">
+                                <th:block th:case="desc">
+                                    <button class="float-right border-0 bg-transparent sort-column" sort-type="desc"
+                                            column="deleteFlag">
+                                        <i class="ti-angle-down"></i>
+                                    </button>
+                                </th:block>
+                                <th:block th:case="asc">
+                                    <button class="float-right border-0 bg-transparent sort-column" sort-type="asc"
+                                            column="deleteFlag">
+                                        <i class="ti-angle-up"></i>
+                                    </button>
+                                </th:block>
+                            </th:block>
+                        </th:block>
+                        <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'deleteFlag'}">
+                            <button class="float-right border-0 bg-transparent sort-column" sort-type="none"
+                                    column="deleteFlag">
+                                <i class="ti-exchange-vertical"></i>
+                            </button>
+                        </th:block>
+                    </th>
+                    <th scope="col">Action</th>
+                    <th scope="col"></th>
+                </th:block>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sc,stat : ${curriculumSubjects}">
+                <th><input class="sc-id" type="hidden" th:value="${sc.id}"><span th:text="${stat.index + 1}"></span>
+                </th>
+                <td><input type="hidden" th:value="${sc.group}"><span th:text="${sc.code}"></span></td>
+                <td><a th:href="@{/subject/details(id=${sc.subjectId})}" th:text="${sc.name}"></a></td>
+                <td><span th:text="${sc.semester}"></span></td>
+                <td><span th:text="${sc.noCredit}"></span></td>
+                <td><span th:text="${sc.predecessor == '' ? '' : sc.predecessor}"></span></td>
+                <th:block th:if="${canEdit == true}">
+                    <td><span th:text="${sc.isDeleteFlag ? 'Deactive' : 'Active'}"></span></td>
+                    <td>
+                        <th:block th:if="${sc.isDeleteFlag == true}">
+                            <a href="#" class="changeCurriculumSubjectStatus" th:attr="sc-id=${sc.id}">Active</a>
+                        </th:block>
+                        <th:block th:if="${sc.isDeleteFlag == false}">
+                            <a href="#" class="changeCurriculumSubjectStatus" th:attr="sc-id=${sc.id}">Deactive</a>
+                        </th:block>
+                    </td>
+                </th:block>
+                <td th:if="${canEdit == true}">
+                    <button data-target="#modal-center" data-toggle="modal"
+                            class="btn btn-outline-primary btn-icon edit-subject-modal"><i
+                            class="ti-pencil-alt font-size-14"></i></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="${curriculumSubjects.size() == 0}" class="d-flex justify-content-start text-danger">No subjects
+            founded!!!
+        </div>
+    </div>
+    <div th:if="${canEdit == true}" class="modal center-modal fade" id="modal-center"
+         style="display: block;" aria-modal="true">
+        <div class="modal-dialog">
+            <form th:action="@{/curriculum/subject/update}" id="curriculum-subject-edit" method="post"
+                  class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Subject</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="csId" name="csId">
+                    <div class="form-group subject-code-form">
+                        <label class="required">Subject Code</label>
+                        <input readonly name="code" type="text" class="form-control" id="code"
+                               placeholder="Subject Code">
+                    </div>
+                    <div class="form-group">
+                        <label class="required">Subject Name</label>
+                        <input readonly id="name" name="name" type="text" class="form-control"
+                               placeholder="Subject Name">
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="required">Semester</label>
+                                <input id="semester" name="semester" type="text" class="form-control"
+                                       placeholder="Subject Name">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="required">No Credit</label>
+                                <input id="noCredit" name="noCredit" type="text" class="form-control"
+                                       placeholder="Subject Name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control select2"
+                                style="width: 100%;" tabindex="-1" aria-hidden="true" name="group" id="group">
+                            <th:block th:each="group : ${groups}">
+                                <option th:value="${group.code}"
+                                        th:text="${group.code}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                    <div class="input-group pr-50 d-flex justify-content-between">
+                        <label class="required font-weight-500">Status</label>
+                        <input type="radio" class="form-control" name="status" id="active"
+                               value="activate">
+                        <label class="" for="active">Activate</label>
+
+                        <input type="radio" class="form-control mr-4" name="status" id="deactivate"
+                               value="deactivate">
+                        <label class="" for="deactivate">Deactivate</label>
+                    </div>
+                    <div class="form-group">
+                        <label>Predecessor(s)</label>
+                        <select id="predecessor" multiple name="subjectIds" type="text" class="form-control select2"
+                                placeholder="Subject Name">
+                            <th:block th:each="subject,stat : ${curriculumSubjects}">
+                                <option th:value="${subject.subjectId}" th:text="${subject.code}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-uniform">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary float-right" id="btn-edit-curriculum-subject">Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div th:if="${canAdd == true}" class="modal center-modal fade" id="modal-subject-new"
+         style="display: block;" aria-modal="true">
+        <div class="modal-dialog modal-lg">
+            <form th:action="@{/curriculum/subject/add}" id="curriculum-subject-add" method="post"
+                  class="modal-content">
+                <input type="hidden" th:value="${curriculumId}" name="curriculumId" id="curriculumId">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Curriculum Subject</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body row align-items-center">
+                    <div class="col-9">
+                        <div class="form-group subject-code">
+                            <label class="font-weight-700 font-size-16 required">Subject</label>
+                            <select class="form-control select2 select2-hidden-accessible"
+                                    style="width: 100%;" tabindex="-1" aria-hidden="true" id="subjectCode"
+                                    name="subjectCode">
+                                <th:block th:each="subject : ${subjects}">
+                                    <option th:value="${subject.code}"
+                                            th:text="${subject.code + ' - ' + subject.name}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label>&nbsp;</label>
+                        <div class="form-group">
+                            <button data-target="#add-new-subject" type="button" data-toggle="collapse"
+                               aria-expanded="false" aria-controls="add-new-subject"
+                               class="btn btn-rounded btn-primary form-control btn-md" id="btn-show-add"><span>Show Add New</span></button>
+                        </div>
+                    </div>
+                    <div class="col-12 row p-1 collapse" id="add-new-subject">
+                        <div class="form-group col-5">
+                            <label class="font-weight-700 font-size-16 required">Subject Code</label>
+                            <input id="code-new" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col-5">
+                            <label class="font-weight-700 font-size-16 required">Subject Name</label>
+                            <input id="name-new" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col-2">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-primary btn-md form-control" id="add-more-subject">Add</button>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="font-weight-700 font-size-16">Group</label>
+                            <select class="form-control select2 select2-hidden-accessible"
+                                    style="width: 100%;" tabindex="-1" aria-hidden="true" name="groupCode">
+                                <option value="0">&nbsp;</option>
+                                <th:block th:each="group : ${groups}">
+                                    <option th:value="${group.code}" th:text="${group.code}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label class="font-weight-700 font-size-16">Semester</label>
+                            <input type="text" class="form-control text-dark border-secondary"
+                                   name="semester" title="Name is required">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label class="font-weight-700 font-size-16">No Credit</label>
+                            <input type="text" class="form-control text-dark border-secondary"
+                                   name="noCredit" title="Name is required">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-uniform">
+                    <button type="button" class="btn btn-secondary btn-rounded" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary float-right" id="btn-curriculum-subject-add">Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

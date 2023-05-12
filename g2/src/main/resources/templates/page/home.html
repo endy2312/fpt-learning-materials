@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/head.html :: head"></head>
+<body class="hold-transition light-skin theme-primary fixed">
+<div th:replace="common/header.html :: header(${subMenu})"></div>
+
+<div class="container-fluid mt-70">
+    <th:block th:switch="${subMenu}">
+        <div th:case="'login'">
+            <div th:insert="page/authentication/login"></div>
+        </div>
+        <div th:case="'email-register'">
+            <div th:insert="page/authentication/register"></div>
+        </div>
+        <div th:case="'phone-register'">
+            <div th:insert="page/authentication/phone-register"></div>
+        </div>
+        <div th:case="'forgot'">
+            <div th:insert="page/authentication/forgot-password"></div>
+        </div>
+        <div th:case="'features'">
+            <div th:insert="page/features :: features"></div>
+        </div>
+        <div th:case="'admin/system-setting'">
+            <div th:insert="page/admin/system-setting :: system-setting(${settings}, ${types}, ${request}, ${settingsContent})"></div>
+        </div>
+        <div th:case="'admin/permission-setting'">
+            <div th:insert="page/admin/permission-setting :: permission-setting(${permissions}, ${roles}, ${request}, ${pageContent})"></div>
+        </div>
+        <div th:case="'admin/new-setting'">
+            <div th:insert="page/admin/new-setting :: new-setting(${setting}, ${systemTypes})"></div>
+        </div>
+        <div th:case="'profile'">
+            <div th:insert="page/user-profile :: profile(${userForm}, ${title}, ${roleList}, ${userRoleNames}, ${errorMobileMessage}, ${errorEmailMessage}, ${errorVerifyCodeMessage})"></div>
+        </div>
+        <div th:case="'admin/account-list'">
+            <div th:insert="page/admin/account-list :: account-list(${users}, ${request}, ${userForm}, ${permission}, ${roles}, ${selectedRole}, ${selectedStatus})"></div>
+        </div>
+
+        <div th:case="'curriculums'">
+            <div th:insert="page/curriculum/curriculums :: curriculums(${curriculums}, ${request}, ${permission}, ${loginRoles}, ${status})"></div>
+        </div>
+        <div th:case="'curriculum/details'">
+            <!--            <div th:insert="page/curriculum/details :: curriculum-details(${pageTitle}, ${curriculumPages},-->
+            <!--            ${curriculumName}, ${curriculum}, ${pageAction}, ${actionType}, ${curriculumForm}, ${loginRoles},-->
+            <!--            ${curriculumId}, ${ploList}, ${request}, ${staffList}, ${decisions}, ${ploForm})"></div>-->
+            <div th:insert="page/curriculum/details :: curriculum-details"></div>
+        </div>
+        <div th:case="'admin/subjects'">
+            <div th:insert="page/admin/subjects :: subject-list(${subjects}, ${request})"></div>
+        </div>
+        <div th:case="'subject/details'">
+            <div th:insert="page/subject/subject-details :: subject-details(${subject},${canEdit})"></div>
+        </div>
+        <div th:case="'subject/predecessor'">
+            <div th:insert="page/subject/subject-predecessor"></div>
+        </div>
+        <div th:case="'subject/successor'">
+            <div th:insert="page/subject/subject-successor"></div>
+        </div>
+        <div th:case="'syllabus/details'">
+            <div th:insert="page/syllabus/details :: syllabus-details"></div>
+        </div>
+        <div th:case="'syllabus/list'">
+            <div th:insert="page/syllabus/syllabi :: syllabus-list(${syllabi}, ${request}, ${loginRoles})"></div>
+        </div>
+        <div th:case="'admin/decisions'">
+            <div th:insert="page/admin/decisions"></div>
+        </div>
+        <div th:case="'admin/decision-details'">
+            <div th:insert="page/admin/decision-details :: decision-details(${decisionForm}, ${canEdit}, ${actionType})"></div>
+        </div>
+    </th:block>
+</div>
+<div th:replace="common/script.html :: script"></div>
+<div th:replace="common/loader"></div>
+</body>
+
+<script>
+    $(document).ready(function () {
+        $('.page-link').on('click', function () {
+            let currentClick = $.trim($(this).text());
+            let currentPage = $.trim($('#pageClicked').val());
+            let totalPages = $.trim($('#totalPage').val());
+            if (currentClick == 'Next') {
+                if (currentPage != totalPages) {
+                    $('#pageClicked').val(Number(currentPage) + 2);
+                }
+            } else if (currentClick == 'Previous') {
+                if (currentPage != totalPages) {
+                    $('#pageClicked').val(Number(currentPage));
+                }
+            } else {
+                $('#pageClicked').val(currentClick);
+            }
+            $('#utils-form').submit();
+        });
+
+        $('.sort-column').on('click', function () {
+            let sortBy = $(this).attr('column');
+            let sortType = $(this).attr('sort-type');
+            if (sortType == 'none' || sortType == 'desc') {
+                $('#sort-type').val('asc')
+            } else if (sortType == 'asc') {
+                $('#sort-type').val('desc')
+            }
+            $('#sort-by').val(sortBy);
+            $('#pageClicked').val(Number($('#pageClicked').val()) + 1);
+            console.log({sortBy, sortType})
+
+            $('#utils-form').submit();
+        });
+    });
+</script>
+</html>

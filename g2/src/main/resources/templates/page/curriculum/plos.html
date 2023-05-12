@@ -1,0 +1,88 @@
+<div th:fragment="plo-list(ploList, request, curriculumId, loginRoles)">
+    <div class="row align-items-center justify-content-between">
+        <ol class="font-size-18 font-weight-600 breadcrumb mb-0 bg-unset pt-0">
+            <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i class="ti-home"></i></a>
+            </li>
+            <li class="breadcrumb-item active"><a th:href="@{/curriculum/overview(id=${curriculumId})}"
+                                                  class="px-md-3 px-1">Overview</a></li>
+            <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">PLO(s)</a></li>
+        </ol>
+        <a th:if="${loginRoles!= null && (loginRoles.contains('CRDD Head') || loginRoles.contains('CRDD Staff') || loginRoles.contains('Admin'))}"
+           th:href="@{/curriculum/insertplo(curriculumId=${curriculumId})}"
+           class="btn btn-success font-size-16 d-inline-flex align-items-center"><i
+                class="ti-plus font-size-16 mr-2"></i> Add PLO</a>
+    </div>
+    <div class="col-12 px-0 mb-4">
+        <!--                <form th:action="@{/PLOS}" id="utils-form" class="" method="get">-->
+        <!--                    <div class="row align-items-center justify-content-between">-->
+        <!--                        <div class="col-2">-->
+        <!--                            <div class="form-group d-flex mb-0">-->
+        <!--                                <input type="text"-->
+        <!--                                       class="form-control border-right-0 rounded-right-0 bg-transparent text-dark border-secondary"-->
+        <!--                                       placeholder="Search" name="keyword"-->
+        <!--                                       th:value="${request.keyword == null ? '' : request.keyword}">-->
+        <!--                                <div class="input-append">-->
+        <!--                                    <button class="btn btn-secondary btn-md btn-search rounded-left-0 border-secondary"-->
+        <!--                                            type="submit">-->
+        <!--                                        <i class="ti-search"></i>-->
+        <!--                                    </button>-->
+        <!--                                </div>-->
+        <!--                            </div>-->
+        <!--                        </div>-->
+        <!--                        <div class="col-auto">-->
+        <!--                            <a th:if="${permission.canAdd == true}" th:href="@{/plo/insert}"-->
+        <!--                               class="btn btn-primary d-flex align-items-center"><i class="ti-plus btn-icon-custom"></i>-->
+        <!--                                Create plo-->
+        <!--                            </a>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+        <!--                    <input type="hidden" name="page" th:value="${ploList.number}" id="pageClicked">-->
+        <!--                    <input type="hidden" th:value="${ploList.totalPages}" id="totalPage">-->
+        <!--                    <input type="hidden" id="sort-by" name="sortBy"-->
+        <!--                           th:value="${#strings.arraySplit(request.sortBy,':')[0]}">-->
+        <!--                    <input type="hidden" id="sort-type" name="sortType" th:value="${request.sortType}">-->
+        <!--                </form>-->
+    </div>
+    <div class="col-12 px-0">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col" class="w-120">PLO Name</th>
+                <th scope="col">PLO Description</th>
+                <th class="text-center" scope="col" th:if="${loginRoles!= null && (loginRoles.contains('CRDD Head') || loginRoles.contains('CRDD Staff') || loginRoles.contains('Admin'))}">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="plo, stat  : ${ploList}">
+                <td th:text="${stat.index + 1}">#</td>
+                <td
+                        th:text="${plo.name == null || plo.name == '' ? 'No data' : plo.name}">Name
+                </td>
+                <td th:text="${plo.description == null || plo.description == '' ? 'No data' : plo.description}">
+                    Description
+                </td>
+
+                <td  class="text-center" th:if="${loginRoles!= null && (loginRoles.contains('CRDD Head') || loginRoles.contains('CRDD Staff') || loginRoles.contains('Admin'))}">
+                    <div th:attr="plo-id=${plo.id}" class=" d-flex align-center">
+                        <!--                                                <a-->
+                        <!--                                                   th:href="@{/plo/overview(id=${plo.id})}"-->
+                        <!--                                                   class="btn btn-outline-info btn-icon"><i-->
+                        <!--                                                        class="ti-eye font-size-20"></i></a>-->
+                        <a
+                                th:href="@{/curriculum/insertplo(id=${plo.id})}"
+                                class="btn btn-outline-warning btn-icon btn-update-account"><i
+                                class="ti-pencil-alt font-size-20 "></i></a>
+                        <button type="button" class="btn btn-outline-danger btn-icon btn-change-active-cplo">
+                            <i class="ti-trash font-size-20"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--    <div th:if="${ploList.content.size > 0}"-->
+<!--         th:insert="common/paging :: pageData('/PLOS', ${ploList})"></div>-->
+</div>

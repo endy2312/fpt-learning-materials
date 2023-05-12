@@ -1,0 +1,83 @@
+<div class="p-15" th:fragment="subject-successor">
+    <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+        <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+            <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i class="ti-home"></i></a>
+            </li>
+            <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">Subject Successor</a></li>
+        </ol>
+    </div>
+    <div class="col-12 align-items-center pt-15">
+        <form th:action="@{/subject/successors}" id="utils-form" method="get">
+            <div class="row">
+                <div class="col-2">
+                    <div class="form-group d-flex">
+                        <input type="text"
+                               class="form-control border-right-0 rounded-right-0 bg-transparent text-dark border-secondary"
+                               placeholder="Search setting name" name="code" th:value="${code}">
+                        <div class="input-append">
+                            <button class="btn btn-secondary btn-md btn-search rounded-left-0 border-secondary"
+                                    type="submit">
+                                <i class="ti-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-12 mt-15">
+        <table class="table table-bordered table-light table-hover">
+            <thead>
+            <th scope="col">ID</th>
+            <th class="col-2">Syllabus</th>
+            <th scope="col">Subject Code</th>
+            <th scope="col">Decision</th>
+            <th class="col-4">Curriculum</th>
+            <th class="col-2">Successor</th>
+            </thead>
+            <tbody>
+            <th:block th:each="successor,stat : ${successors}">
+                <tr>
+                    <th th:text="${stat.index+1}"></th>
+                    <td>
+                        <a th:href="@{/syllabus/overview(id=${successor.syllabus.id})}">
+                            <u th:text="${successor.syllabus.name}"></u>
+                        </a>
+                    </td>
+                    <td th:text="${successor.code}"></td>
+
+                    <td th:text="${successor.syllabus.decision.customFormat}"></td>
+                    <td>
+                        <a th:href="@{/curriculum/overview(id=${successor.curriculum.id})}">
+                            <u th:text="${successor.curriculum.code + ' - '+ successor.curriculum.name}"></u>
+                        </a>
+                    </td>
+                    <td>
+                        <th:block th:each="successorFirst,stat : ${successor.subSuccessor}">
+                            <b th:text="${stat.index == successor.subSuccessor.size - 1 ? successorFirst.key : successorFirst.key +', '}"></b>
+                        </th:block>
+                        <th:block th:each="successorFirst,stat : ${successor.subSuccessor}">
+                            <div th:class="${stat.index == successor.subSuccessor.size - 1 ? '' :'mb-4'}">
+                            <span th:text="${successorFirst.key}+': '">
+                            </span>
+                                <th:block th:each="subPre,subStat : ${successorFirst.value}">
+                                    <span th:text="${subStat.index == successorFirst.value.size - 1 ? subPre.code : subPre.code + ','}"></span>
+                                </th:block>
+                            </div>
+                        </th:block>
+                    </td>
+                </tr>
+
+            </th:block>
+            <tr th:if="${successors.size == 0 && code != ''}">
+                <td class="text-danger font-weight-500" colspan="6"
+                    th:text="${'Subject code ' + code + ' does not exist or has no syllabus'}"></td>
+            </tr>
+            </tbody>
+
+        </table>
+        <!--        <div th:if="${predecessors.content.size == 0}" class="d-flex justify-content-start text-danger">No subject-->
+        <!--            founded!!!-->
+        <!--        </div>-->
+    </div>
+</div>

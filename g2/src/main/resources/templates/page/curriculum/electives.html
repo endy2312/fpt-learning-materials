@@ -1,0 +1,118 @@
+<div class="container-fluid" th:fragment="elective">
+    <div class="row">
+        <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+            <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+                <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i
+                        class="ti-home"></i></a>
+                </li>
+                <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">Elective Management</a>
+                </li>
+            </ol>
+        </div>
+        <div class=" col-12 mb-4">
+
+        </div>
+
+        <div class="col-12 mb-2">
+            <span class="font-weight-600 font-size-22"><u>Elective List</u></span>
+            <button th:if="${canAdd}" class="btn btn-github btn-md float-right rounded20" data-target="#add-elective" data-toggle="modal">
+                Add Elective
+            </button>
+            <button th:if="${canAdd}" class="btn btn-github btn-md float-right mr-4" data-target="#existed-elective" data-toggle="modal">
+                Choose Existed
+            </button>
+        </div>
+        <div class="col-12 mb-4">
+            <div class="table-responsive">
+                <table class="table table-bordered table-light">
+                    <thead>
+                    <tr>
+                        <th> Elective Id</th>
+                        <th> Elective Name</th>
+                        <th> Subject</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="elective : ${electives}">
+                        <tr>
+                            <td th:text="${elective.id}"></td>
+                            <td th:text="${elective.code}"></td>
+                            <td>
+                                <a th:href="@{'/elective/details?id='+${elective.id} +'&&curriculumId='+${curriculum.id}}"><u
+                                        th:text="${elective.name}"></u></a></td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal center-modal fade" id="add-elective"
+         style="display: block;"
+         aria-modal="true">
+        <div class="modal-dialog">
+            <form th:action="@{/curriculum/electives/insert}" method="post" id="form-add-elective"
+                  class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Elective</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input name="curriculumId" id="curriculumId" type="hidden" th:value="${curriculum.id}">
+                    <div class="form-group">
+                        <label>Elective Code<span class="error vertical-align-sub ml-1">*</span></label>
+                        <input name="code" type="text" class="form-control"
+                               placeholder="Elective Code">
+                    </div>
+                    <div class="form-group">
+                        <label>Elective Name<span class="error vertical-align-sub ml-1">*</span></label>
+                        <input name="name" type="text" class="form-control"
+                               placeholder="Elective Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Note</label>
+                        <textarea name="note" type="text" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-uniform">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary float-right" id="btn-submit-update">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal center-modal fade" id="existed-elective"
+         style="display: block;"
+         aria-modal="true">
+        <div class="modal-dialog">
+            <form th:action="@{/curriculum/electives/add}" method="post" id="form-existed-elective"
+                  class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Elective</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input name="curriculumId" type="hidden" th:value="${curriculum.id}">
+                    <div class="form-group">
+                        <label>Choose Elective<span class="error vertical-align-sub ml-1">*</span></label>
+                        <select name="electiveId" class="form-control select2 select2-hidden-accessible"
+                                style="width: 100%;">
+                            <th:block th:each="elective : ${electiveExisted}">
+                                <option th:value="${elective.id}" th:text="${elective.code+' - '+elective.name}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-uniform">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary float-right" id="btn-submit-existed">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

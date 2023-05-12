@@ -1,0 +1,59 @@
+<div th:fragment="po-list(poList, request, curriculumId, loginRoles)">
+    <div class="row align-items-center justify-content-between">
+        <ol class="font-size-18 font-weight-600 breadcrumb mb-0 bg-unset pt-0">
+            <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i class="ti-home"></i></a>
+            </li>
+            <li class="breadcrumb-item active"><a th:href="@{/curriculum/overview(id=${curriculumId})}"
+                                                  class="px-md-3 px-1">Overview</a></li>
+            <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">PO(s)</a></li>
+        </ol>
+        <a th:if="${loginRoles!= null && (loginRoles.contains('CRDD Head') || loginRoles.contains('CRDD Staff') || loginRoles.contains('Admin'))}"
+           th:href="@{/curriculum/insertpo}"
+           class="btn btn-success font-size-16 d-inline-flex align-items-center"><i
+                class="ti-plus font-size-16 mr-2"></i> Add PO</a>
+    </div>
+    <div class="col-12 px-0 mb-4">
+      
+    </div>
+    <div class="col-12 px-0">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col" class="w-120">PO Name</th>
+                <th scope="col">PO Description</th>
+                <th class="text-center" scope="col" th:if="${loginRoles!= null && (loginRoles.contains('CRDD Head') || loginRoles.contains('CRDD Staff') || loginRoles.contains('Admin'))}">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="po, stat  : ${poList}">
+                <td th:text="${stat.index + 1}">#</td>
+                <td
+                        th:text="${po.name == null || po.name == '' ? 'No data' : po.name}">Name
+                </td>
+                <td th:text="${po.description == null || po.description == '' ? 'No data' : po.description}">
+                    Description
+                </td>
+
+                <td  class="text-center" th:if="${loginRoles!= null && (loginRoles.contains('CRDD Head') || loginRoles.contains('CRDD Staff') || loginRoles.contains('Admin'))}">
+                    <div th:attr="po-id=${po.id}" class=" d-flex align-center">
+                        <!--                                                <a-->
+                        <!--                                                   th:href="@{/po/overview(id=${po.id})}"-->
+                        <!--                                                   class="btn btn-outline-info btn-icon"><i-->
+                        <!--                                                        class="ti-eye font-size-20"></i></a>-->
+                        <a
+                                th:href="@{/curriculum/insertpo(id=${po.id})}"
+                                class="btn btn-outline-warning btn-icon btn-update-account"><i
+                                class="ti-pencil-alt font-size-20 "></i></a>
+                        <button type="button" class="btn btn-outline-danger btn-icon btn-change-active-cpo">
+                            <i class="ti-trash font-size-20"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</div>

@@ -1,0 +1,124 @@
+.btn.btn-switch {
+    padding: 0;
+    position: relative;
+    border: none;
+    height: 1.6rem;
+    width: 3.2rem;
+    border-radius: 60px;
+    color: #6b7381;
+    background: #bdc1c8;
+}
+
+.btn-switch:focus,
+.btn-switch.focus,
+.btn-switch:focus.active,
+.btn-switch.focus.active {
+    outline: none;
+}
+
+.btn-switch:before,
+.btn-switch:after {
+    line-height: 1.5rem;
+    width: 4rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: absolute;
+    bottom: 0;
+    transition: opacity .25s;
+}
+
+.btn-switch:before {
+    content: 'Off';
+    left: 0.35rem;
+}
+
+.btn-switch:after {
+    content: 'On';
+    right: 0.3rem;
+    opacity: 0;
+}
+
+.btn-switch > .handle {
+    position: absolute;
+    top: 2.5px;
+    left: 0.1875rem;
+    width: 1.225rem;
+    height: 1.225rem;
+    border-radius: 50%;
+    background: #fff;
+    transition: left .25s;
+    box-shadow: none;
+}
+
+.btn-switch.active {
+    transition: background-color 0.25s;
+}
+
+.btn-switch.active > .handle {
+    left: 1.6875rem;
+    transition: left .25s;
+}
+
+.btn-switch.active:before {
+    opacity: 0;
+}
+
+.btn-switch.active:after {
+    opacity: 1;
+}
+
+.btn-switch.btn-sm:before,
+.btn-switch.btn-sm:after {
+    line-height: 0;
+    color: #fff;
+    letter-spacing: .75px;
+    left: 0.4125rem;
+    width: 2.325rem;
+}
+
+.btn-switch.btn-sm:before {
+    text-align: right;
+}
+
+.btn-switch.btn-sm:after {
+    text-align: left;
+    opacity: 0;
+}
+
+.btn-switch.btn-sm.active:before {
+    opacity: 0;
+}
+
+.btn-switch.btn-sm.active:after {
+    opacity: 1;
+}
+
+.btn-switch.btn-xs:before,
+.btn-switch.btn-xs:after {
+    display: none;
+}
+
+.btn-switch:before,
+.btn-switch:after {
+    color: #fff;
+}
+
+.btn-switch.active {
+    background-color: #1e7e34;
+}
+
+.custom-select-icon {
+    position: absolute;
+    top: 53%;
+    right: 15px;
+}
+
+.focus-input {
+    /*border: unset;*/
+}
+.focus-input:focus{
+    /*border: 1px solid black !important;*/
+}

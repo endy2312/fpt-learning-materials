@@ -1,0 +1,126 @@
+<div class="container" th:fragment="overview-details(syllabus)">
+    <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+        <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+            <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i class="ti-home"></i></a>
+            </li>
+            <li class="breadcrumb-item active"><a th:href="@{/syllabi}" class="px-md-3 px-1">Syllabus List</a></li>
+            <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">Update Syllabus</a></li>
+        </ol>
+    </div>
+    <div class="pt-15">
+        <form th:action="@{/syllabus/update}" method="post" id="syllabus-form">
+            <div class="row">
+                <div class="form-group">
+                    <input type="hidden" name="id" th:value="${syllabus.id}">
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="font-weight-700 font-size-16 required">Name</label>
+                        <input type="text" class="form-control  text-dark border-secondary"
+                               name="name" th:value="${syllabus.name == null ? '' : syllabus.name}" title="Code is required">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="font-weight-700 font-size-16 required">Subject Name</label>
+                        <input type="text" class="form-control  text-dark border-secondary" readonly
+                               th:value="${syllabus.subject == null ? '' : (syllabus.subject.code + ' - ' + syllabus.subject.name)}" title="Name is required">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-6 pl-1">
+                            <div class="form-group">
+                                <label class="font-weight-700 font-size-16 required">Degree Level</label>
+                                <select class="form-control select2 select2-hidden-accessible"
+                                        style="width: 100%;" tabindex="-1" aria-hidden="true" name="degreeLevel">
+                                    <th:block th:each="setting : ${settings}">
+                                        <option th:value="${setting.title}" th:text="${setting.title}" th:selected="${setting.title == syllabus.degreeLevel.title}"></option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6 pr-1">
+                            <div class="form-group">
+                                <label class="font-weight-700 font-size-16 required">No Credit</label>
+                                <input type="text" class="form-control  text-dark border-secondary"
+                                       name="noCredit" th:value="${syllabus.noCredit == null ? '' : syllabus.noCredit}" title="Name is required">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-6 pl-1">
+                            <div class="form-group">
+                                <label class="font-weight-700 font-size-16 required">Scoring Scale</label>
+                                <input type="text" class="form-control  text-dark border-secondary"
+                                       name="scoringScale" th:value="${syllabus.scoringScale == null ? '' : syllabus.scoringScale}" title="Name is required">
+                            </div>
+                        </div>
+                        <div class="col-6 pr-1">
+                            <div class="form-group">
+                                <label class="font-weight-700 font-size-16 required">MinAvgMarkToPass</label>
+                                <input type="text" class="form-control  text-dark border-secondary"
+                                       name="minAvg" th:value="${syllabus.minAvg == null ? '' : syllabus.minAvg}" title="Name is required">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="font-weight-700 font-size-16 required">Time Allocation</label>
+                        <input type="text" class="form-control  text-dark border-secondary"
+                               name="timeAllocation" th:value="${syllabus.timeAllocation == null ? '' : syllabus.timeAllocation}" title="Name is required">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="font-weight-700 font-size-16 required">Syllabus Designer</label>
+                        <select class="form-control select2 select2-hidden-accessible"
+                                style="width: 100%;" tabindex="-1" aria-hidden="true" name="designer">
+                            <th:block th:each="designer : ${designers}">
+                                <option th:value="${designer.username}" th:text="${designer.fullName}" th:selected="${designer.username == syllabus.designer.username}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="font-weight-700 font-size-16 required">Syllabus Designer</label>
+                        <select class="form-control select2 select2-hidden-accessible"
+                                style="width: 100%;" tabindex="-1" aria-hidden="true" name="reviewer">
+                            <th:block th:each="reviewer : ${reviewers}">
+                                <option th:value="${reviewer.username}" th:text="${reviewer.fullName}" th:selected="${reviewer.username == syllabus.reviewer.username}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="font-weight-700 font-size-16">Tools</label>
+                        <input type="text" class="form-control  text-dark border-secondary"
+                               name="tools" th:value="${syllabus.tools == null ? '' : syllabus.tools}" title="Name is required">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="font-weight-700 font-size-16">Note</label>
+                        <textarea class="form-control  text-dark border-secondary" rows="4"
+                                  name="note" th:value="${syllabus.note == null ? '' : syllabus.note}" title="Name is required"></textarea>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="font-weight-700 font-size-16">Student Tasks</label>
+                        <textarea class="form-control text-dark border-secondary" rows="4"
+                                  name="studentTasks" th:text="${syllabus.studentTasks}"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions mt-10 px-3">
+                <button type="button" class="btn btn-rounded btn-success" id="btnUpdateSyllabus">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

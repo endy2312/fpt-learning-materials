@@ -1,0 +1,169 @@
+<div class="container-fluid p-15" th:fragment="account-list(users, request, userRequestDTO, permission, roles, selectedRole, selectedStatus)">
+    <section class=" content">
+        <div class="row">
+            <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+                <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+                    <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i class="ti-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">Account List </a></li>
+                </ol>
+            </div>
+            <div class="col-12 mb-4">
+                <form th:action="@{/accounts}" id="utils-form" class="" method="get">
+                    <div class="row align-items-center justify-content-between">
+                        <div class="col-8 row">
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <select onchange="this.form.submit()" class="form-control select2 select2-hidden-accessible"
+                                            style="width: 100%;" tabindex="-1" aria-hidden="true" name="status">
+                                        <option value="All">All Status</option>
+                                        <option th:selected="${'Activate' == selectedStatus}" th:value="${'Activate'}">Activate</option>
+                                        <option th:selected="${'Deactivate' == selectedStatus}" th:value="${'Deactivate'}">Deactivate
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group d-flex mb-0">
+                                    <input type="text"
+                                           class="form-control border-right-0 rounded-right-0 bg-transparent text-dark border-secondary"
+                                           placeholder="Search" name="keyword" th:value="${request.keyword == null ? '' : request.keyword}">
+                                    <div class="input-append">
+                                        <button class="btn btn-secondary btn-md btn-search rounded-left-0 border-secondary"
+                                                type="submit">
+                                            <i class="ti-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <a th:if="${permission.canAdd == true}" th:href="@{/account/insert}"
+                               class="btn btn-primary d-flex align-items-center"><i class="ti-plus btn-icon-custom"></i>
+                                Create
+                                account
+                            </a>
+                        </div>
+                    </div>
+                    <input type="hidden" name="page" th:value="${users.number}" id="pageClicked">
+                    <input type="hidden" th:value="${users.totalPages}" id="totalPage">
+                    <input type="hidden" id="sort-by" name="sortBy" th:value="${#strings.arraySplit(request.sortBy,':')[0]}">
+                    <input type="hidden" id="sort-type" name="sortType" th:value="${request.sortType}">
+                </form>
+            </div>
+            <div class="col-12">
+                <table th:if="${permission.accessAll == true}" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Full name
+                            <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'fullName'}">
+                                <th:block th:switch="${request.sortType}">
+                                    <th:block th:case="desc">
+                                        <button class="float-right border-0 bg-transparent sort-column" sort-type="desc" column="fullName">
+                                            <i class="ti-angle-down"></i>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:case="asc">
+                                        <button class="float-right border-0 bg-transparent sort-column" sort-type="asc" column="fullName">
+                                            <i class="ti-angle-up"></i>
+                                        </button>
+                                    </th:block>
+                                </th:block>
+                            </th:block>
+                            <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'fullName'}">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="none" column="fullName">
+                                    <i class="ti-exchange-vertical"></i>
+                                </button>
+                            </th:block>
+                        </th>
+                        <!--                        <th scope="col">Username</th>-->
+                        <th scope="col">Email
+                            <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'email'}">
+                                <th:block th:switch="${request.sortType}">
+                                    <th:block th:case="desc">
+                                        <button class="float-right border-0 bg-transparent sort-column" sort-type="desc" column="email">
+                                            <i class="ti-angle-down"></i>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:case="asc">
+                                        <button class="float-right border-0 bg-transparent sort-column" sort-type="asc" column="email">
+                                            <i class="ti-angle-up"></i>
+                                        </button>
+                                    </th:block>
+                                </th:block>
+                            </th:block>
+                            <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'email'}">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="none" column="email">
+                                    <i class="ti-exchange-vertical"></i>
+                                </button>
+                            </th:block>
+                        </th>
+                        <th scope="col">Mobile
+                            <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'mobile'}">
+                                <th:block th:switch="${request.sortType}">
+                                    <th:block th:case="desc">
+                                        <button class="float-right border-0 bg-transparent sort-column" sort-type="desc" column="mobile">
+                                            <i class="ti-angle-down"></i>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:case="asc">
+                                        <button class="float-right border-0 bg-transparent sort-column" sort-type="asc" column="mobile">
+                                            <i class="ti-angle-up"></i>
+                                        </button>
+                                    </th:block>
+                                </th:block>
+                            </th:block>
+                            <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'mobile'}">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="none" column="mobile">
+                                    <i class="ti-exchange-vertical"></i>
+                                </button>
+                            </th:block>
+                        </th>
+                        <th scope="col">Image</th>
+                        <th scope="col" class="text-center w-150">Status</th>
+                        <th class="text-center" scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user, stat  : ${users}">
+                        <td th:text="${stat.index + 1}">#</td>
+                        <td th:text="${user.fullName == null || user.fullName == '' ? '' : user.fullName}">Full
+                            name
+                        </td>
+                        <!--                        <td th:text="${user.username == null || user.username == '' ? '' : user.username}">Username</td>-->
+                        <td th:text="${user.email == null || user.email == '' ? '' : user.email}">Email</td>
+                        <td th:text="${user.mobile == null || user.mobile == '' ? '' : user.mobile}">Mobile</td>
+                        <td><a class="btn" rel="popover" th:data-img="${user.image}">Image</a></td>
+                        <td class="text-center">
+                            <div th:if="${user.deleteFlag == false}" class="status-badge bg-success-light mx-auto" >
+                                <p class="d-inline-block m-0 text-success" >Activate</p>
+                            </div>
+                            <div th:if="${user.deleteFlag == true}" class="status-badge bg-danger-light mx-auto">
+                                <p class="d-inline-block m-0 text-danger">Deactivate</p>
+                            </div>
+                        </td>
+                        <td th:attr="user-id=${user.id}" class="text-center">
+<!--                            <a th:if="${permission.canRead == true}" th:href="@{/account/details(id=${user.id})}"-->
+<!--                               class="btn btn-outline-info btn-icon"><i-->
+<!--                                    class="ti-eye font-size-20"></i></a>-->
+                            <a th:if="${permission.canEdit == true}" th:href="@{/account/insert(id=${user.id})}"
+                               class="btn btn-outline-warning btn-icon btn-update-account"><i
+                                    class="ti-pencil-alt font-size-20 "></i></a>
+                            <button type="button" th:if="${permission.canDelete == true && user.deleteFlag == true}"
+                                   class="btn btn-outline-danger btn-icon btn-change-active-account'">  <i class="ti-lock font-size-20"></i>
+                            </button>
+                            <button type="button" th:if="${permission.canDelete == true  && user.deleteFlag == false}"
+                                    class="btn btn-outline-success btn-icon btn-change-active-account">  <i class="ti-unlock font-size-20"></i></button>
+<!--                            <a th:if="${permission.canDelete == true}" th:href="@{/account/status/change(id=${user.id})}"-->
+<!--                               th:class="${user.deleteFlag == true ? 'btn btn-outline-danger  btn-icon ' : 'btn btn-outline-success  btn-icon '}"><i-->
+<!--                                    th:class="${user.deleteFlag == true ? 'ti-lock font-size-20' : 'ti-unlock font-size-20'}"></i></a>-->
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <div th:if="${users.content.size > 0}" th:insert="common/paging :: pageData('/accounts', ${users})"></div>
+</div>

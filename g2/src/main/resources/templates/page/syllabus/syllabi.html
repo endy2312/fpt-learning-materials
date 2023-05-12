@@ -1,0 +1,270 @@
+<div class="container-fluid" th:fragment="syllabus-list(syllabi, request, loginRoles)">
+    <div class="row">
+        <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+            <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+                <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i
+                        class="ti-home"></i></a>
+                </li>
+                <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">Syllabus List</a></li>
+            </ol>
+        </div>
+        <div class="col-12">
+            <form th:action="@{/syllabi}" id="utils-form" class="" method="get">
+                <div class="row align-items-center">
+                    <th:block th:if="${#lists.contains(session.loginRoles, 'Syllabus Reviewer') || canAdd == true || canEdit == true || canDelete == true}">
+                        <div class="col-2">
+                            <select onchange="this.form.submit()" class="form-control select2 select2-hidden-accessible"
+                                    style="width: 100%;" tabindex="-1" aria-hidden="true" name="status">
+                                <option value="All">All Status</option>
+                                <th:block th:each="st : ${status}">
+                                    <option th:selected="${st == request.status}" th:value="${st}"
+                                            th:text="${st}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+                    </th:block>
+                    <div class="col-2">
+                        <div class="form-group d-flex mb-0">
+                            <input type="text"
+                                   class="form-control border-right-0 rounded-right-0 bg-transparent text-dark border-secondary"
+                                   placeholder="Search" name="keyword"
+                                   th:value="${request.keyword == null ? '' : request.keyword}">
+                            <div class="input-append">
+                                <button class="btn btn-secondary btn-md btn-search rounded-left-0 border-secondary"
+                                        type="submit">
+                                    <i class="ti-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="page" th:value="${syllabi.number}" id="pageClicked">
+                <input type="hidden" th:value="${syllabi.totalPages}" id="totalPage">
+                <input type="hidden" id="sort-by" name="sortBy"
+                       th:value="${#strings.arraySplit(request.sortBy,':')[0]}">
+                <input type="hidden" id="sort-type" name="sortType" th:value="${request.sortType}">
+            </form>
+        </div>
+        <div class="col-12 mb-5 mt-3">
+            <div class="row">
+                <div class="col-2 d-flex justify-content-start align-items-end text-info">
+                    <div th:text="'Found ' + ${syllabi.getTotalElements()} + ' syllabus(es)'"></div>
+                </div>
+                <th:block th:if="${canAdd == true}">
+                    <div class="col-10 d-flex justify-content-end">
+                        <a type="button" class="btn btn-md btn-rounded btn-github h-35" th:href="@{/syllabus/details}">Add New</a>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+        <div class="col-12">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th class="col-1 min-w-150">Subject Code
+                        <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'subject.code'}">
+                            <th:block th:switch="${request.sortType}">
+                                <th:block th:case="desc">
+                                    <button class="float-right border-0 bg-transparent sort-column" sort-type="desc"
+                                            column="subject.code">
+                                        <i class="ti-angle-down"></i>
+                                    </button>
+                                </th:block>
+                                <th:block th:case="asc">
+                                    <button class="float-right border-0 bg-transparent sort-column" sort-type="asc"
+                                            column="subject.code">
+                                        <i class="ti-angle-up"></i>
+                                    </button>
+                                </th:block>
+                            </th:block>
+                        </th:block>
+                        <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'subject.code'}">
+                            <button class="float-right border-0 bg-transparent sort-column" sort-type="none"
+                                    column="subject.code">
+                                <i class="ti-exchange-vertical"></i>
+                            </button>
+                        </th:block>
+                    </th>
+                    <th scope="col">Subject Name
+                        <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'subject.name'}">
+                            <th:block th:switch="${request.sortType}">
+                                <th:block th:case="desc">
+                                    <button class="float-right border-0 bg-transparent sort-column" sort-type="desc"
+                                            column="subject.name">
+                                        <i class="ti-angle-down"></i>
+                                    </button>
+                                </th:block>
+                                <th:block th:case="asc">
+                                    <button class="float-right border-0 bg-transparent sort-column" sort-type="asc"
+                                            column="subject.name">
+                                        <i class="ti-angle-up"></i>
+                                    </button>
+                                </th:block>
+                            </th:block>
+                        </th:block>
+                        <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'subject.name'}">
+                            <button class="float-right border-0 bg-transparent sort-column" sort-type="none"
+                                    column="subject.name">
+                                <i class="ti-exchange-vertical"></i>
+                            </button>
+                        </th:block>
+                    </th>
+                    <th scope="col">Syllabus Name
+                        <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'name'}">
+                            <th:block th:switch="${request.sortType}">
+                                <th:block th:case="desc">
+                                    <button class="float-right border-0 bg-transparent sort-column" sort-type="desc"
+                                            column="name">
+                                        <i class="ti-angle-down"></i>
+                                    </button>
+                                </th:block>
+                                <th:block th:case="asc">
+                                    <button class="float-right border-0 bg-transparent sort-column" sort-type="asc"
+                                            column="name">
+                                        <i class="ti-angle-up"></i>
+                                    </button>
+                                </th:block>
+                            </th:block>
+                        </th:block>
+                        <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'name'}">
+                            <button class="float-right border-0 bg-transparent sort-column" sort-type="none"
+                                    column="name">
+                                <i class="ti-exchange-vertical"></i>
+                            </button>
+                        </th:block>
+                    </th>
+                    <th scope="col">DecisionNo MM/dd/yyyy</th>
+                    <th:block th:if="${#lists.contains(session.loginRoles, 'Syllabus Reviewer') || canAdd == true || canEdit == true || canDelete == true}">
+                        <th scope="col" class="min-w-120">Status
+                            <th:block th:if="${#strings.arraySplit(request.sortBy,':')[0] == 'status'}">
+                                <th:block th:switch="${request.sortType}">
+                                    <th:block th:case="desc">
+                                        <button class="float-right border-0 bg-transparent sort-column" sort-type="desc" column="status">
+                                            <i class="ti-angle-down"></i>
+                                        </button>
+                                    </th:block>
+                                    <th:block th:case="asc">
+                                        <button class="float-right border-0 bg-transparent sort-column" sort-type="asc" column="status">
+                                            <i class="ti-angle-up"></i>
+                                        </button>
+                                    </th:block>
+                                </th:block>
+                            </th:block>
+                            <th:block th:unless="${#strings.arraySplit(request.sortBy,':')[0] == 'status'}">
+                                <button class="float-right border-0 bg-transparent sort-column" sort-type="none" column="status">
+                                    <i class="ti-exchange-vertical"></i>
+                                </button>
+                            </th:block>
+                        </th>
+                        <th scope="col" class="text-center">Action</th>
+                    </th:block>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="syllabus, stat  : ${syllabi}">
+                    <td th:text="${stat.index + 1}">#</td>
+                    <td th:text="${syllabus.subject.code}"></td>
+                    <td th:text="${syllabus.subject.name}"></td>
+                    <td>
+                        <a th:href="@{/syllabus/overview(id=${syllabus.id})}" class=""
+                           th:text="${syllabus.name == null || syllabus.name == '' ? 'No data' : syllabus.name}">Name</a>
+                    </td>
+                    <td>
+                        <a href="" class="" th:text="${syllabus.decision == null || syllabus.decision.decisionNo == ''
+                        && syllabus.decision.decisionDate != null ? 'No data' : syllabus.decision.getCustomFormat}">DecisionNo
+                            MM/dd/yyyy</a>
+                    </td>
+                    <th:block th:if="${#lists.contains(session.loginRoles, 'Syllabus Reviewer') || canAdd == true || canEdit == true || canDelete == true}">
+                        <td th:text="${syllabus.status}"></td>
+                        <th:block th:if="${syllabus.status eq 'Add New'}">
+                            <th:block th:if="${#lists.contains(session.loginRoles, 'Syllabus Designer') || #lists.contains(session.loginRoles, 'CRDD Head')}">
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a th:href="@{/syllabus/details(id=${syllabus.id})}">Edit</a>
+                                    </div>
+                                </td>
+                            </th:block>
+                            <th:block th:unless="${#lists.contains(session.loginRoles, 'Syllabus Designer') || #lists.contains(session.loginRoles, 'CRDD Head')}">
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a th:href="@{/syllabus/overview(id=${syllabus.id})}">View</a>
+                                    </div>
+                                </td>
+                            </th:block>
+                        </th:block>
+                        <th:block th:if="${syllabus.status eq 'Submitted'}">
+                            <th:block th:if="${#lists.contains(session.loginRoles, 'CRDD Staff')}">
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a href="#" class="changeSyllabusStatus" th:attr="syllabus-id=${syllabus.id}">Verify</a>
+                                    </div>
+                                </td>
+                            </th:block>
+                            <th:block th:unless="${#lists.contains(session.loginRoles, 'CRDD Staff')}">
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a th:href="@{/syllabus/overview(id=${syllabus.id})}">View</a>
+                                    </div>
+                                </td>
+                            </th:block>
+                        </th:block>
+                        <th:block th:if="${syllabus.status eq 'Verified'}">
+                            <th:block th:if="${#lists.contains(session.loginRoles, 'CRDD Head')}">
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a href="#" class="changeSyllabusStatus mr-2 text-success" th:attr="syllabus-id=${syllabus.id}">Approve</a> |
+                                        <a href="#" class="changeSyllabusStatus ml-2 text-danger" th:attr="syllabus-id=${syllabus.id}">Disapprove</a>
+                                    </div>
+                                </td>
+                            </th:block>
+                            <th:block th:unless="${#lists.contains(session.loginRoles, 'CRDD Head')}">
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a th:href="@{/syllabus/overview(id=${syllabus.id})}">View</a>
+                                    </div>
+                                </td>
+                            </th:block>
+                        </th:block>
+                        <th:block th:if="${syllabus.status eq 'Approved'}">
+                            <th:block th:if="${#lists.contains(session.loginRoles, 'CRDD Head')}">
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a href="#" class="changeSyllabusStatus text-danger" th:attr="syllabus-id=${syllabus.id}">Disapprove</a>
+                                    </div>
+                                </td>
+                            </th:block>
+                            <th:block th:unless="${#lists.contains(session.loginRoles, 'CRDD Head')}">
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a th:href="@{/syllabus/overview(id=${syllabus.id})}">View</a>
+                                    </div>
+                                </td>
+                            </th:block>
+                        </th:block>
+                        <th:block th:if="${syllabus.status eq 'Disapproved'}">
+                            <th:block th:if="${#lists.contains(session.loginRoles, 'CRDD Head')}">
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a href="#" class="changeSyllabusStatus text-success" th:attr="syllabus-id=${syllabus.id}">Approve</a>
+                                    </div>
+                                </td>
+                            </th:block>
+                            <th:block th:unless="${#lists.contains(session.loginRoles, 'CRDD Head')}">
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a th:href="@{/syllabus/overview(id=${syllabus.id})}">View</a>
+                                    </div>
+                                </td>
+                            </th:block>
+                        </th:block>
+                    </th:block>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div th:if="${syllabi.content.size == 0}" class="d-flex justify-content-start text-danger">No syllabus founded!!!</div>
+    <div th:if="${syllabi.content.size > 0}"
+         th:insert="common/paging :: pageData('/syllabi', ${syllabi})"></div>
+</div>

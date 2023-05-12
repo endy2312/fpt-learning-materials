@@ -1,0 +1,103 @@
+<div class="pt-15" th:fragment="decision-details(decisionForm,canEdit, actionType)">
+    <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+        <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+            <li class="breadcrumb-item "><a th:href="@{/static}" class="pr-md-3 pl-1 pr-1 "><i class="ti-home"></i></a>
+            </li>
+            <li class="breadcrumb-item active"><a th:href="@{/decisions}" class="px-md-3 px-1">Decision List </a></li>
+            <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary"
+                                                  th:text="${actionType == 'isCreate' ? 'Create Decision' : 'Update Decision'}"></a>
+            </li>
+        </ol>
+    </div>
+    <section class="content">
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <form th:action="@{/decision/insert}" method="post" id="updateDecisionForm">
+                    <input type="hidden" th:value="${decisionForm.id}" name="id" id="decisionId">
+                    <input type="hidden" th:value="${decisionForm.decisionDate}" name="id" id="decisionDate">
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label class="required">DecisionNo</label>
+                            <input type="text" class="form-control" name="decisionNo"
+                                   th:value="${decisionForm.decisionNo}"
+                                   th:readonly="${decisionForm.decisionNo != null && decisionForm.decisionNo != ''}">
+                        </div>
+                        <div class="form-group col-6" th:if="${actionType == 'isUpdate'}">
+                            <label>Approved Date</label>
+                            <input type="text" class="form-control" name="decisionDate" id="working-date"
+                                   th:value="${decisionForm.decisionDate}">
+                        </div>
+                        <div class="form-group col-6">
+                            <label>Decision Name</label>
+                            <input type="text" class="form-control" name="decisionName"
+                                   th:value="${decisionForm.decisionName}">
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Note</label>
+                            <textarea rows="6" class="form-control" name="note"
+                                      th:value="${decisionForm.note}"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" id="btn-update-decisionForm" class="btn btn-github">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row justify-content-center" th:if="${actionType == 'isUpdate'}">
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-12 mt-50" th:if="${decisionForm.curriculums[0].size() > 0}">
+                        <p class="font-size-20">Curriculum list</p>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col" class="min-w-200">CurriculumCode</th>
+                                <th scope="col">Name</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="curriculum, stat  : ${decisionForm.curriculums[0]}">
+                                <td th:text="${stat.index + 1}">#</td>
+                                <td th:text="${curriculum.code == null || curriculum.code == '' ? '' : curriculum.code}">
+                                    Curriculum Code
+                                </td>
+                                <td>
+                                    <a th:href="@{/curriculum/overview(id=${curriculum.id})}" class=""
+                                       th:text="${curriculum.name == null || curriculum.name == '' ? '' : curriculum.name}">Name</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12 mb-50" th:if="${decisionForm.syllabuses[0].size() > 0}">
+                        <p class="font-size-20 mt-20">Syllabus list</p>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th class="col-1 min-w-150">Subject Code</th>
+                                <th scope="col">Subject Name</th>
+                                <th scope="col">Syllabus Name</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="syllabus, stat  : ${decisionForm.syllabuses[0]}">
+                                <td th:text="${stat.index + 1}">#</td>
+                                <td th:text="${syllabus.subject.code}"></td>
+                                <td th:text="${syllabus.subject.name}"></td>
+                                <td>
+                                    <a th:href="@{/syllabus/overview(id=${syllabus.id})}" class=""
+                                       th:text="${syllabus.name == null || syllabus.name == '' ? '' : syllabus.name}">Name</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

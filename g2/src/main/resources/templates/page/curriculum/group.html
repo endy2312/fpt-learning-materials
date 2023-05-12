@@ -1,0 +1,96 @@
+<div class="container-fluid" th:fragment="elective">
+    <div class="row">
+        <div class="font-size-18 font-weight-600 d-flex justify-content-start ">
+            <ol class="breadcrumb mb-0 mt-4 bg-unset pt-0">
+                <li class="breadcrumb-item "><a th:href="@{/home}" class="pr-md-3 pl-1 pr-1 "><i
+                        class="ti-home"></i></a>
+                </li>
+                <li class="breadcrumb-item active"><a href="#" class="px-md-3 px-1 text-primary">Group Management</a>
+                </li>
+            </ol>
+        </div>
+        <div class=" col-12 mb-4">
+        </div>
+
+        <div class="col-12 mb-2">
+            <span class="font-weight-600 font-size-22"><u>Group List</u></span>
+            <button th:if="${canAdd}" class="btn btn-github btn-md float-right" data-target="#add-group"
+                    data-toggle="modal">
+                Add Group
+            </button>
+        </div>
+        <div class="col-12 mb-4">
+            <div class="table-responsive">
+                <table class="table table-bordered table-light">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Group Code</th>
+                        <th>Group Name</th>
+                        <th th:if="${canDelete}">Group Name</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="group : ${groups}">
+                        <tr>
+                            <td th:text="${group.id}"></td>
+                            <td th:text="${group.code}"></td>
+                            <td>
+                                <a th:href="@{'/group/details?id='+${group.id} +'&&curriculumId='+${curriculum.id}}"><u
+                                        th:text="${group.name}"></u></a></td>
+                            <td th:if="${canDelete}" class="text-center"><a href="#" th:attr="group-id=${group.id}"
+                                                                            class="text-danger delete-group"><u>Delete</u></a>
+                            </td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal center-modal fade" id="add-group"
+         style="display: block;"
+         aria-modal="true">
+        <div class="modal-dialog">
+            <form th:action="@{/group/add}" method="post" id="form-add-group"
+                  class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Group</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input name="curriculumId" id="curriculum-id" type="hidden" th:value="${curriculum.id}">
+                    <div class="form-group group-code">
+                        <label>Group Code<span class="error vertical-align-sub ml-1">*</span></label>
+                        <input id="group-code" name="code" type="text" class="form-control"
+                               placeholder="Group Code">
+                    </div>
+                    <div class="form-group">
+                        <label>Group Name<span class="error vertical-align-sub ml-1">*</span></label>
+                        <input id="group-name" name="name" type="text" class="form-control"
+                               placeholder="Group Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Subject<span class="error vertical-align-sub ml-1">*</span></label>
+                        <select id="multi-subject-subject" name="subjectIds" multiple="multiple"
+                                class="form-control select2 select2-hidden-accessible"
+                                style="width: 100%;">
+                            <th:block th:each="subject : ${subjectSelect}">
+                                <option th:value="${subject.id}" th:text="${subject.code +' - '+subject.name}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                    <div>
+                        <span class="text-danger font-italic"><b>Note: </b>If you confirm, the subjects you selected will be deleted from the other group and added to the group you are currently creating</span>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-uniform">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary float-right" id="btn-add-group">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
